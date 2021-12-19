@@ -56,7 +56,7 @@ public class BasicDice {
         Player player = Player.fromEvent(event);
         Map<String,String> aliases = diceAliases.get(player);
 
-        if(Objects.isNull(aliases)){
+        if(Objects.isNull(aliases) || aliases.size() == 0){
             event.getMessage().replyEmbeds(SimpleEmbedMessage.titleDescEmbed(":x: 등록된 주사위 별명이 없습니다.",
                     "!ra 명령을 사용하여 별명을 등록하세요.")).queue();
             return;
@@ -66,6 +66,13 @@ public class BasicDice {
 
         String name = messages[1];
         String queryString = aliases.get(name);
+
+        if(Objects.isNull(queryString)){
+            event.getMessage().replyEmbeds(SimpleEmbedMessage.titleDescEmbed(":x: 해당 별명으로 등록된 주사위가 없습니다.",
+                    "!ra 명령을 사용하여 별명을 등록하세요.")).queue();
+            return;
+        }
+
         if(messages.length>2){
             String expr = messages[2];
             queryString = aliases.get(name)+expr;
@@ -77,9 +84,53 @@ public class BasicDice {
 
     public void command_rl(@NotNull MessageReceivedEvent event){
 
+        Player player = Player.fromEvent(event);
+        Map<String,String> aliases = diceAliases.get(player);
+
+        if(Objects.isNull(aliases) || aliases.size() == 0){
+            event.getMessage().replyEmbeds(SimpleEmbedMessage.titleDescEmbed(":x: 등록된 주사위 별명이 없습니다.",
+                    "!ra 명령을 사용하여 별명을 등록하세요.")).queue();
+            return;
+        }
+        StringBuilder registeredDice = new StringBuilder();
+        for (Map.Entry<String, String> alias : aliases.entrySet()) {
+            registeredDice.append(alias.getKey())
+                    .append(" -> ")
+                    .append(alias.getValue())
+                    .append("\n");
+        }
+
+        event.getMessage().replyEmbeds(SimpleEmbedMessage.titleDescEmbed("등록된 주사위 별명 목록",
+                registeredDice.toString())).queue();
+
     }
 
     public void command_rd(@NotNull MessageReceivedEvent event){
+
+        Player player = Player.fromEvent(event);
+        Map<String,String> aliases = diceAliases.get(player);
+
+        if(Objects.isNull(aliases) || aliases.size() == 0){
+            event.getMessage().replyEmbeds(SimpleEmbedMessage.titleDescEmbed(":x: 등록된 주사위 별명이 없습니다.",
+                    "!ra 명령을 사용하여 별명을 등록하세요.")).queue();
+            return;
+        }
+
+        String[] messages = event.getMessage().getContentDisplay().split(" ");
+
+        String name = messages[1];
+        String expr = aliases.get(name);
+
+        if(Objects.isNull(expr)){
+            event.getMessage().replyEmbeds(SimpleEmbedMessage.titleDescEmbed(":x: 해당 별명으로 등록된 주사위가 없습니다.",
+                    "!ra 명령을 사용하여 별명을 등록하세요.")).queue();
+            return;
+        }
+
+        aliases.remove(name);
+
+        event.getMessage().replyEmbeds(SimpleEmbedMessage.titleDescEmbed("주사위 별명이 제거되었습니다.",
+                name+" -> "+expr)).queue();
 
     }
 
