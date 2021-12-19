@@ -44,6 +44,11 @@ public class BasicDice {
         String expr = messages[2];
 
         aliases.put(name,expr);
+
+
+        event.getMessage().replyEmbeds(SimpleEmbedMessage.titleDescEmbed("주사위 별명이 등록되었습니다.",
+                name+" -> "+expr)).queue();
+
     }
 
     public void command_rt(@NotNull MessageReceivedEvent event){
@@ -60,9 +65,11 @@ public class BasicDice {
         String[] messages = event.getMessage().getContentDisplay().split(" ");
 
         String name = messages[1];
-        String expr = messages[2];
-
-        String queryString = aliases.get(name)+expr;
+        String queryString = aliases.get(name);
+        if(messages.length>2){
+            String expr = messages[2];
+            queryString = aliases.get(name)+expr;
+        }
 
         event.getMessage().replyEmbeds(rollDice(queryString)).queue();
 
