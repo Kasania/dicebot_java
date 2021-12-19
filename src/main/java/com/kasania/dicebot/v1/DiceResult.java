@@ -5,44 +5,21 @@
  */
 package com.kasania.dicebot.v1;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DiceResult {
 
-    public List<String> dices;
+    public final String query;
 
-    public int sum;
+    public final List<DiceBunch> diceBunches;
+    public final List<String> judgements;
 
-    public String query;
+    public String result;
 
+    public DiceResult(String query, List<DiceBunch> diceBunches, List<String> judgements) {
+        this.query = query;
 
-    public DiceResult(){
-
-        dices = new ArrayList<>();
-    }
-
-    public void addDice(long value){
-        dices.add(String.valueOf(value));
-        sum += value;
-    }
-
-    public void addDice(String value){
-        dices.add(value);
-        if(value.equals("-")){
-            sum -= 1;
-        }
-        else{
-            sum += 1;
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "DiceResult{" +
-                "dices=" + dices +
-                ", sum=" + sum +
-                ", query='" + query + '\'' +
-                '}';
+        this.diceBunches = diceBunches;
+        this.judgements = judgements;
     }
 }

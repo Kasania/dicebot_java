@@ -5,6 +5,7 @@
  */
 package com.kasania.dicebot.common;
 
+import com.kasania.dicebot.v1.DiceBunch;
 import com.kasania.dicebot.v1.DiceResult;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -20,42 +21,42 @@ public class SimpleEmbedMessage {
         return embed.build();
     }
 
-    public static MessageEmbed diceEmbed(String result, String queryMessage, List<DiceResult> diceResults, List<String> judgements){
+    public static MessageEmbed diceEmbed(DiceResult result){
         EmbedBuilder embed = new EmbedBuilder();
-        if(result.length()>240){
+        if(result.result.length()>240){
             embed.setTitle(":game_die: 결과");
-            embed.addField("결과", result, true);
+            embed.addField("결과", result.result, true);
         }else{
-            embed.setTitle(":game_die: 결과 : " + result);
+            embed.setTitle(":game_die: 결과 : " + result.result);
         }
-        if(queryMessage.length()<1024){
-            embed.addField("명령","`"+queryMessage+"`",false);
+        if(result.query.length()<1024){
+            embed.addField("명령","`"+result.query+"`",false);
         }
 
-        if(!judgements.isEmpty()){
+        if(!result.judgements.isEmpty()){
             StringBuilder judgementValue = new StringBuilder();
-            for (String judgement : judgements) {
+            for (String judgement : result.judgements) {
                 judgementValue.append("[")
                         .append(judgement)
                         .append("]\n");
             }
             embed.addField("판정 목록",judgementValue.toString(),false);
         }
-        if(!diceResults.isEmpty()){
+        if(!result.diceBunches.isEmpty()){
             StringBuilder diceValue = new StringBuilder();
-            for (DiceResult diceResult : diceResults) {
+            for (DiceBunch diceBunch : result.diceBunches) {
                 diceValue.append("[");
-                for (String dice : diceResult.dices) {
+                for (String dice : diceBunch.dices) {
                     diceValue.append(dice).append(", ");
                 }
-                diceValue.append(diceResult.query).append("]\n");
+                diceValue.append(diceBunch.query).append("]\n");
             }
 
             if(diceValue.length()>1024){
                 diceValue.setLength(0);
-                for (DiceResult diceResult : diceResults) {
+                for (DiceBunch diceBunch : result.diceBunches) {
                     diceValue.append("[");
-                    diceValue.append(diceResult.query).append("]\n");
+                    diceValue.append(diceBunch.query).append("]\n");
                 }
             }
 

@@ -6,36 +6,65 @@
 package com.kasania.dicebot.v1;
 
 import com.kasania.dicebot.common.SimpleEmbedMessage;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class BasicDice {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
+    private final Map<Player,Map<String,String>> diceAliases = new HashMap<>();
+
+
     public void command_r(@NotNull MessageReceivedEvent event){
         String message = event.getMessage().getContentDisplay();
         String queryString = message.split(" ")[1];
-        List<DiceResult> diceResults = new ArrayList<>();
-        List<String> judgements = new ArrayList<>();
 
-        event.getMessage().replyEmbeds(rollDice(queryString, diceResults, judgements)).queue();
+        event.getMessage().replyEmbeds(rollDice(queryString)).queue();
     }
 
     public void command_ra(@NotNull MessageReceivedEvent event){
 
+        Player player = Player.fromEvent(event);
+        Map<String,String> aliases = diceAliases.get(player);
 
+        if(Objects.isNull(aliases)){
+            aliases = new HashMap<>();
+            diceAliases.put(player,aliases);
+        }
 
+        String[] messages = event.getMessage().getContentDisplay().split(" ");
+
+        String name = messages[1];
+        String expr = messages[2];
+
+        aliases.put(name,expr);
     }
 
     public void command_rt(@NotNull MessageReceivedEvent event){
+
+        Player player = Player.fromEvent(event);
+        Map<String,String> aliases = diceAliases.get(player);
+
+        if(Objects.isNull(aliases)){
+            event.getMessage().replyEmbeds(SimpleEmbedMessage.titleDescEmbed(":x: 등록된 주사위 별명이 없습니다.",
+                    "!ra 명령을 사용하여 별명을 등록하세요.")).queue();
+            return;
+        }
+
+        String[] messages = event.getMessage().getContentDisplay().split(" ");
+
+        String name = messages[1];
+        String expr = messages[2];
+
+        String queryString = aliases.get(name)+expr;
+
+        event.getMessage().replyEmbeds(rollDice(queryString)).queue();
 
     }
 
@@ -48,16 +77,16 @@ public class BasicDice {
     }
 
 
-    public MessageEmbed rollDice(String queryMessage, List<DiceResult> diceResults, List<String> judgements){
+    public MessageEmbed rollDice(String queryMessage){
 
         MessageEmbed embed;
 
         try{
-            String result = new StackDice()
+            DiceResult result = new StackDice()
                     .calcExpr(queryMessage
                             .replace("<=","#")
-                            .replace(">=","$"),diceResults, judgements);
-            embed = SimpleEmbedMessage.diceEmbed(result, queryMessage, diceResults, judgements);
+                            .replace(">=","$"));
+            embed = SimpleEmbedMessage.diceEmbed(result);
 
         }
         catch (AssertionError assertionError){

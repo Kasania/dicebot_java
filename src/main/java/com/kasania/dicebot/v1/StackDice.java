@@ -29,15 +29,12 @@ public class StackDice {
     }
 
 
-    public String calcExpr(String query, List<DiceResult> diceResults, List<String> judgements){
+    public DiceResult calcExpr(String query){
+        DiceResult diceResult = new DiceResult(query,new ArrayList<>(), new ArrayList<>());
 
-        return postfixEval(
-                convertExpr(
-                        splitTokens(query
+        postfixEval(convertExpr(splitTokens(query)), diceResult);
 
-                        )
-                ),diceResults, judgements
-        );
+        return diceResult;
     }
 
     private List<String> splitTokens(String expr){
@@ -112,8 +109,9 @@ public class StackDice {
         return postfixList;
     }
 
-    private String postfixEval(List<String> tokens, List<DiceResult> diceResults, List<String> judgements){
+    private void postfixEval(List<String> tokens, DiceResult diceResult){
         Stack<String> valStack = new Stack<>();
+
         boolean isJudgementResult = false;
 
         for (String token : tokens) {
@@ -131,8 +129,8 @@ public class StackDice {
                 if(!valStack.isEmpty()){
                     n2 = new BigDecimal(valStack.pop());
                 }
-                DiceResult result = rollDice(n2,n1);
-                diceResults.add(result);
+                DiceBunch result = rollDice(n2,n1);
+                diceResult.diceBunches.add(result);
                 valStack.push(String.valueOf(result.sum));
                 isJudgementResult = false;
             }
@@ -163,7 +161,7 @@ public class StackDice {
                     case "#" -> {
 
                         boolean result = judge <= 0;
-                        judgements.add(
+                        diceResult.judgements.add(
                                 n2 + "<=" + n1 + ", " + (result ? "성공" : "실패")
                         );
 
@@ -172,7 +170,7 @@ public class StackDice {
                     }
                     case "$" -> {
                         boolean result = judge >= 0;
-                        judgements.add(
+                        diceResult.judgements.add(
                                 n2 + ">=" + n1 + ", " + (result ? "성공" : "실패")
                         );
                         valStack.push(String.valueOf(result ? 1 : 0));
@@ -180,7 +178,7 @@ public class StackDice {
                     }
                     case "<" -> {
                         boolean result = judge < 0;
-                        judgements.add(
+                        diceResult.judgements.add(
                                 n2 + "<" + n1 + ", " + (result ? "성공" : "실패")
                         );
                         valStack.push(String.valueOf(result ? 1 : 0));
@@ -188,7 +186,7 @@ public class StackDice {
                     }
                     case ">" -> {
                         boolean result = judge > 0;
-                        judgements.add(
+                        diceResult.judgements.add(
                                 n2 + ">" + n1 + ", " + (result ? "성공" : "실패")
                         );
                         valStack.push(String.valueOf(result ? 1 : 0));
@@ -200,13 +198,12 @@ public class StackDice {
 
         }
         String result = valStack.pop();
-        return isJudgementResult? result.equals("1") ? "성공" : "실패" : result;
-
+        diceResult.result = isJudgementResult? result.equals("1") ? "성공" : "실패" : result;
     }
 
-    private DiceResult rollDice(BigDecimal x, String y){
+    private DiceBunch rollDice(BigDecimal x, String y){
 
-        DiceResult diceResult = new DiceResult();
+        DiceBunch diceBunch = new DiceBunch();
 
         if(x.compareTo(BigDecimal.valueOf(1000)) > 0){
             throw new AssertionError("num of dice is too large");
@@ -217,13 +214,13 @@ public class StackDice {
             for (int i = 0; i < x.intValue(); i++) {
                 long rand = random.nextLong(0,2)-1;
                 if(rand == -1){
-                    diceResult.addDice("-");
+                    diceBunch.addDice("-");
                 }
                 else if(rand == 1){
-                    diceResult.addDice("+");
+                    diceBunch.addDice("+");
                 }
                 else{
-                    diceResult.addDice(rand);
+                    diceBunch.addDice(rand);
                 }
             }
 
@@ -238,12 +235,12 @@ public class StackDice {
             for (int i = 0; i < x.intValue(); i++) {
 
                 long rand = random.nextLong(1, Long.parseLong(y));
-                diceResult.addDice(rand);
+                diceBunch.addDice(rand);
             }
         }
 
-        diceResult.query = x + "d"+ y + "=" + diceResult.sum;
-        return diceResult;
+        diceBunch.query = x + "d"+ y + "=" + diceBunch.sum;
+        return diceBunch;
 
 
     }
