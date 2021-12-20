@@ -5,6 +5,7 @@
  */
 package com.kasania.dicebot.v1;
 
+import com.kasania.dicebot.common.SimpleEmbedMessage;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -178,8 +179,13 @@ public enum Commands {
                 event.getMember().getEffectiveName(),
                 event.getMessage().getContentDisplay());
 
+        try{
+            eventHandler.accept(event);
+        }catch (Exception e){
+            event.getMessage().replyEmbeds(SimpleEmbedMessage.titleDescEmbed(":x: 명령을 실행하는데 실패했습니다.",
+                    "!다이스 "+this.name()+" 명령어를 확인해주세요.")).queue();
+        }
 
-        eventHandler.accept(event);
     }
 
 
