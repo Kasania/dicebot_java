@@ -84,7 +84,7 @@ public class StackDice {
                 opStack.push(token);
             }
             else if(token.equals(")")){
-                while(opStack.peek().equals("(")){
+                while(!opStack.peek().equals("(")){
                     postfixList.add(opStack.pop());
                 }
                 opStack.pop();
