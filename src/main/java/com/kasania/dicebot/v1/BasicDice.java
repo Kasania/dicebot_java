@@ -20,7 +20,6 @@ public class BasicDice {
 
     private final Map<Player,Map<String,String>> diceAliases = new HashMap<>();
 
-
     public void command_r(@NotNull MessageReceivedEvent event){
         String message = event.getMessage().getContentDisplay();
         String queryString = message.split(" ")[1];
@@ -45,9 +44,7 @@ public class BasicDice {
 
         aliases.put(name,expr);
 
-
         SimpleEmbedMessage.replyTitleDesc(event,"주사위 별명이 등록되었습니다.", name+" -> "+expr);
-
     }
 
     public void command_rt(@NotNull MessageReceivedEvent event){
@@ -78,7 +75,6 @@ public class BasicDice {
         }
 
         event.getMessage().replyEmbeds(rollDice(queryString)).queue();
-
     }
 
     public void command_rl(@NotNull MessageReceivedEvent event){
@@ -101,7 +97,6 @@ public class BasicDice {
 
         SimpleEmbedMessage.replyTitleDesc(event,"등록된 주사위 별명 목록",
                 registeredDice.toString());
-
     }
 
     public void command_rd(@NotNull MessageReceivedEvent event){
@@ -130,7 +125,6 @@ public class BasicDice {
 
         SimpleEmbedMessage.replyTitleDesc(event,"주사위 별명이 제거되었습니다.",
                 name+" -> "+expr);
-
     }
 
 
@@ -159,7 +153,5 @@ public class BasicDice {
 
         return embed;
     }
-
-
 
 }

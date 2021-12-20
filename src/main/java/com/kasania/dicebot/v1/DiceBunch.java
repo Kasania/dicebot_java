@@ -16,7 +16,6 @@ public class DiceBunch {
 
     public String query;
 
-
     public DiceBunch(){
 
         dices = new ArrayList<>();

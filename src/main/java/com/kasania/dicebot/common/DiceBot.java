@@ -35,7 +35,6 @@ public class DiceBot extends ListenerAdapter {
         }
     }
 
-
     public void handleMessage(@NotNull MessageReceivedEvent event){
         String message = event.getMessage().getContentDisplay();
 
@@ -51,8 +50,5 @@ public class DiceBot extends ListenerAdapter {
             }
         }
     }
-
-
-
 
 }

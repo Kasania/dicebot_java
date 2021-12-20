@@ -241,11 +241,6 @@ public class StackDice {
 
         diceBunch.query = x + "d"+ y + "=" + diceBunch.sum;
         return diceBunch;
-
-
     }
-
-
-
 
 }

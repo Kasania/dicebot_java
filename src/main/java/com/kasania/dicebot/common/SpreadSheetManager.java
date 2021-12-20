@@ -86,7 +86,6 @@ public class SpreadSheetManager {
         }
 
         return false;
-
     }
 
     public WorkSheet reloadSheet(Player player) throws FileNotFoundException {
@@ -98,6 +97,5 @@ public class SpreadSheetManager {
     public WorkSheet removePlayerSheet(Player player){
         return PLAYER_SHEETS.remove(player);
     }
-
 
 }

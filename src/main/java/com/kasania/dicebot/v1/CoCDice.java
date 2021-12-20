@@ -74,7 +74,6 @@ public class CoCDice {
         WorkSheet sheet = SpreadSheetManager.getInstance().getPlayerSheet(player);
         SimpleEmbedMessage.replyTitleDesc(event,":o: 시트 등록 성공!",
                                 "지금부터 "+sheet.characterName + " 탐사자로 플레이합니다.");
-
     }
 
     public void command_rr(@NotNull MessageReceivedEvent event){
@@ -134,7 +133,6 @@ public class CoCDice {
         }
     }
 
-
     public void command_rccc(@NotNull MessageReceivedEvent event){
 
         EmbedBuilder embed = new EmbedBuilder();
@@ -151,7 +149,6 @@ public class CoCDice {
             diceResults[i] = stackDice.calcExpr("(2d6+6)*5");
         }
         diceResults[8] = stackDice.calcExpr("3d6*5");
-
 
         StringBuilder diceValue = new StringBuilder();
         int i = 0;
@@ -170,8 +167,6 @@ public class CoCDice {
         embed.addField("주사위 목록", diceValue.toString(),true);
 
         event.getMessage().replyEmbeds(embed.build()).queue();
-
     }
-
 
 }
