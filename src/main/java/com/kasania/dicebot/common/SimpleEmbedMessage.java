@@ -9,10 +9,22 @@ import com.kasania.dicebot.v1.DiceBunch;
 import com.kasania.dicebot.v1.DiceResult;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-
-import java.util.List;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class SimpleEmbedMessage {
+
+    public static void replyTitleDesc(@NotNull MessageReceivedEvent event,String title, String... desc){
+        event.getMessage().replyEmbeds(SimpleEmbedMessage.titleDescEmbed(title,String.join("\n",desc))).queue();
+    }
+
+    public static void replyTitleDesc(@NotNull MessageReceivedEvent event,String title, String desc){
+        event.getMessage().replyEmbeds(SimpleEmbedMessage.titleDescEmbed(title,desc)).queue();
+    }
+
+    public static void replyDice(@NotNull MessageReceivedEvent event, DiceResult result){
+        event.getMessage().replyEmbeds(SimpleEmbedMessage.diceEmbed(result)).queue();
+    }
 
     public static MessageEmbed titleDescEmbed(String title, String desc){
         EmbedBuilder embed = new EmbedBuilder();
