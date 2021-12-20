@@ -61,9 +61,9 @@ public enum Commands {
                     추가적인 주사위 표현식을 사용하여 판정에 보정을 적용 할 수 있습니다.
                     b, p 연산을 사용하여 보너스, 페널티 주사위를 적용 할 수 있습니다."""),
 
-    rreset("등록된 CoC 7th 시트 해제",
+    rdel("등록된 CoC 7th 시트 해제",
             """
-                    !rreset\s
+                    !rdel\s
 
                     !ruse 명령으로 등록한 시트를 해제하는 기능입니다."""),
 
@@ -143,12 +143,18 @@ public enum Commands {
     static {
 
         BasicDice basicDice = new BasicDice();
-
         r.eventHandler = basicDice::command_r;
         ra.eventHandler = basicDice::command_ra;
         rd.eventHandler = basicDice::command_rd;
         rl.eventHandler = basicDice::command_rl;
         rt.eventHandler = basicDice::command_rt;
+
+        CoCDice cocDice = new CoCDice();
+        ruse.eventHandler = cocDice::command_ruse;
+        rr.eventHandler = cocDice::command_rr;
+        rdel.eventHandler = cocDice::command_rdel;
+        rstat.eventHandler = cocDice::command_rstat;
+        rccc.eventHandler = cocDice::command_rccc;
 
     }
 
@@ -182,8 +188,9 @@ public enum Commands {
         try{
             eventHandler.accept(event);
         }catch (Exception e){
-            event.getMessage().replyEmbeds(SimpleEmbedMessage.titleDescEmbed(":x: 명령을 실행하는데 실패했습니다.",
-                    "!다이스 "+this.name()+" 명령어를 확인해주세요.")).queue();
+            e.printStackTrace();
+            SimpleEmbedMessage.replyTitleDesc(event,":x: 명령을 실행하는데 실패했습니다.",
+                    "!다이스 "+this.name()+" 명령어를 확인해주세요.");
         }
 
     }
