@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.function.Consumer;
 
 public enum Commands {
@@ -53,9 +55,7 @@ public enum Commands {
     ruse("CoC 7th 다이스 굴리기 시트 등록",
             """
                     !ruse [시트링크] [시트이름]
-                    !ruse [시트링크별명] [시트이름]
                     !ruse https://docs.google.com/spreadsheets/d/1CzAo97L-ioGFHo_d8MC64nxAKiLchd-MkixYL4mxjwE 조 종사(Niq)
-                    !ruse 시트링크별명 조 종사(Niq)
 
                     !rr 명령에 사용할 CoC 7th 시트를 등록하는 명령어입니다.
                     구글 스프레드 시트의 링크 또는 !radd 명령을 통해 별명이 지정된 시트의 별명을 사용 할 수 있습니다.
@@ -215,7 +215,9 @@ public enum Commands {
             channel = event.getTextChannel().getName();
         }
 
-        logger.info("[{}][{}] {}: {}", event.getGuild().getName(),
+        System.out.printf("[%s] [%s] [%s] %s: %s\n",
+                new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()),
+                event.getGuild().getName(),
                 channel,
                 event.getMember().getEffectiveName(),
                 event.getMessage().getContentDisplay());

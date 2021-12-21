@@ -20,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.GeneralSecurityException;
 import java.util.*;
 
@@ -47,12 +49,13 @@ public class SpreadSheetManager {
         //TODO: LOAD
         try {
             GsonFactory gsonFactory = GsonFactory.getDefaultInstance();
-            logger.info("Start SpreadSheetManager");
+            System.out.println("Start SpreadSheetManager");
             NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-            InputStream in = ClassLoader.getSystemResource(credentialPath).openStream();
+//            InputStream in = ClassLoader.getSystemResource(credentialPath).openStream();
+            InputStream in = Files.newInputStream(Path.of(credentialPath));
             ServiceAccountCredentials credentials = ServiceAccountCredentials.fromStream(in);
 
-            logger.info("Start SheetsService");
+            System.out.println("Start SheetsService");
             sheetsService = new Sheets.Builder(HTTP_TRANSPORT, gsonFactory,new HttpCredentialsAdapter(credentials))
                     .setApplicationName("DiceBot")
                     .build();
