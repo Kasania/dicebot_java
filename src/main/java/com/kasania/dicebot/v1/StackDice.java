@@ -234,7 +234,7 @@ public class StackDice {
         else{
             for (int i = 0; i < x.intValue(); i++) {
 
-                long rand = random.nextLong(1, Long.parseLong(y));
+                long rand = random.nextLong(0, Long.parseLong(y))+1;
                 diceBunch.addDice(rand);
             }
         }
