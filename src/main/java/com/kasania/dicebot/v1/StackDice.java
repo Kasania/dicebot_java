@@ -212,7 +212,7 @@ public class StackDice {
 
         if(y.equals("f")) {
             for (int i = 0; i < x.intValue(); i++) {
-                long rand = random.nextLong(0,2)-1;
+                long rand = random.nextLong(0,3)-1;
                 if(rand == -1){
                     diceBunch.addDice("-");
                 }
