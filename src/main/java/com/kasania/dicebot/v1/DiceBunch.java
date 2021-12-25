@@ -20,6 +20,7 @@ public class DiceBunch {
     public DiceBunch(){
 
         dices = new ArrayList<>();
+        sum = BigDecimal.ZERO;
     }
 
     public void addDice(long value){
