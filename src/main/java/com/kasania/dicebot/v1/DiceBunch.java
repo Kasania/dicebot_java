@@ -5,6 +5,7 @@
  */
 package com.kasania.dicebot.v1;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class DiceBunch {
 
     public List<String> dices;
 
-    public int sum;
+    public BigDecimal sum;
 
     public String query;
 
@@ -23,16 +24,16 @@ public class DiceBunch {
 
     public void addDice(long value){
         dices.add(String.valueOf(value));
-        sum += value;
+        sum = sum.add(BigDecimal.valueOf(value));
     }
 
     public void addDice(String value){
         dices.add(value);
         if(value.equals("-")){
-            sum -= 1;
+            sum = sum.subtract(BigDecimal.ONE);
         }
         else{
-            sum += 1;
+            sum = sum.add(BigDecimal.ONE);
         }
     }
 
