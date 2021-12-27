@@ -49,19 +49,19 @@ public class SpreadSheetManager {
         //TODO: LOAD
         try {
             GsonFactory gsonFactory = GsonFactory.getDefaultInstance();
-            System.out.println("Start SpreadSheetManager");
+            logger.info("Start SpreadSheetManager");
             NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 //            InputStream in = ClassLoader.getSystemResource(credentialPath).openStream();
             InputStream in = Files.newInputStream(Path.of(credentialPath));
             ServiceAccountCredentials credentials = ServiceAccountCredentials.fromStream(in);
 
-            System.out.println("Start SheetsService");
+            logger.info("Start SheetsService");
             sheetsService = new Sheets.Builder(HTTP_TRANSPORT, gsonFactory,new HttpCredentialsAdapter(credentials))
                     .setApplicationName("DiceBot")
                     .build();
 
         } catch (IOException | GeneralSecurityException e) {
-            e.printStackTrace();
+            logger.error("{}",e.getMessage(),e);
         }
     }
 

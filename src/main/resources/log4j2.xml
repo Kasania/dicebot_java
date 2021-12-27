@@ -2,16 +2,31 @@
 
 <configuration status="debug">
 
+    <Properties>
+    <Property name="layoutPattern">%d{yyyy-MM-dd hh:mm:ss} %5p [%c] %m%n</Property>
+    </Properties>
+
     <Appenders>
         <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{yyyy-MM-dd hh:mm:ss} %5p [%c] %m%n"/>
+            <PatternLayout pattern="${layoutPattern}"/>
         </Console>
+
+        <RollingFile name="file" fileName="./log/dicebot.log" filePattern="./log/logs/dicebot_%d{yyyy-MM-dd}_%i.log">
+            <PatternLayout pattern="${layoutPattern}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB" /> <!-- 10MB 용량이 초과시 DefaultRolloverStrategy 정책만큼 넘버링 -->
+                <TimeBasedTriggeringPolicy module="true" interval="1" /><!-- 일별 로그 파일 생성-->
+            </Policies>
+            <DefaultRolloverStrategy max="500" fileIndex="min" /><!-- 롤링 파일 500개 까지 생성 -->
+        </RollingFile>
     </Appenders>
 
     <loggers>
-        <root level="debug" additivity="true">
+        <root level="info" additivity="true">
             <AppenderRef ref="console"/>
+            <AppenderRef ref="file"/>
         </root>
+
     </loggers>
 
 </configuration>

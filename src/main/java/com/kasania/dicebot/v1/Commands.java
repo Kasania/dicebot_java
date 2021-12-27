@@ -215,8 +215,7 @@ public enum Commands {
             channel = event.getTextChannel().getName();
         }
 
-        System.out.printf("[%s] [%s] [%s] %s: %s\n",
-                new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()),
+        logger.info("[{}] [{}] {}: {}",
                 event.getGuild().getName(),
                 channel,
                 event.getMember().getEffectiveName(),
@@ -225,7 +224,7 @@ public enum Commands {
         try{
             eventHandler.accept(event);
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error("{}",e.getMessage(),e);
             SimpleEmbedMessage.replyTitleDesc(event,":x: 명령을 실행하는데 실패했습니다.",
                     "!다이스 "+this.name()+" 명령어를 확인해주세요.");
         }

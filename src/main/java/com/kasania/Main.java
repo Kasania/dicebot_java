@@ -9,6 +9,8 @@ import com.kasania.dicebot.common.DiceBot;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
@@ -22,14 +24,17 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+
+        Logger logger = LoggerFactory.getLogger(Main.class);
+
         try {
-            System.out.println("Dice bot is started");
+            logger.info("Dice bot is started");
             String TOKEN = Files.readAllLines(Path.of("keys.txt"), StandardCharsets.UTF_8).get(0);
             JDA jda = JDABuilder.createDefault(TOKEN).setActivity(Activity.listening("!rhelp")).build();
             jda.addEventListener(new DiceBot());
-            System.out.println("Dice bot is initialized");
+            logger.info("Dice bot is initialized");
         } catch (IOException | LoginException e) {
-            e.printStackTrace();
+            logger.error("{}",e.getMessage(),e);
         }
     }
 }

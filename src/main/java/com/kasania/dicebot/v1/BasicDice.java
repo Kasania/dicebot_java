@@ -141,12 +141,12 @@ public class BasicDice {
 
         }
         catch (AssertionError assertionError){
-            assertionError.printStackTrace();
+            logger.error("{}", assertionError.getMessage(),assertionError);
             embed = SimpleEmbedMessage.titleDescEmbed(":warning: 주사위 값이 잘못되었습니다.",
                     "주사위의 개수나 값을 조절해 주세요.");
         }
         catch (Exception e){
-            e.printStackTrace();
+            logger.error("{}", e.getMessage(),e);
             embed = SimpleEmbedMessage.titleDescEmbed(":x: 지원하지 않는 명령어입니다.",
                     "명령어를 확인해 주세요.");
         }
