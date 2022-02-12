@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public enum Commands {
@@ -160,6 +162,7 @@ public enum Commands {
 
         };
 
+        executors = Executors.newCachedThreadPool();
 
     }
 
@@ -169,6 +172,7 @@ public enum Commands {
     public final String fullHelpMessage;
 
     private Consumer<MessageReceivedEvent> eventHandler;
+    private final static ExecutorService executors;
 
     //TODO : fullHelpMessage improve
     Commands(String helpMessage, String fullHelpMessage){
@@ -192,7 +196,7 @@ public enum Commands {
                 event.getMessage().getContentDisplay());
 
         try{
-            eventHandler.accept(event);
+            executors.execute(() -> eventHandler.accept(event));
         }catch (Exception e){
             logger.error("{}",e.getMessage(),e);
             SimpleEmbedMessage.replyTitleDesc(event,":x: 명령을 실행하는데 실패했습니다.",
@@ -200,7 +204,4 @@ public enum Commands {
         }
 
     }
-
-
-
 }

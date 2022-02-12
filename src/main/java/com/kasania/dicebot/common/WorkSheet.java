@@ -86,8 +86,7 @@ public class WorkSheet {
 
                         }
                     }
-                }catch (IndexOutOfBoundsException e){
-                    e.printStackTrace();
+                }catch (IndexOutOfBoundsException ignored){
                 }
             }
         }

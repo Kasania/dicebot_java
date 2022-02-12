@@ -66,14 +66,19 @@ public class SpreadSheetManager {
     }
 
     public WorkSheet getPlayerSheet(Player player){
+        try {
+            return reloadSheet(player);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         return PLAYER_SHEETS.get(player);
     }
 
     public boolean setPlayerSheet(String sheetID, String sheetName, Player player) throws FileNotFoundException, NumberFormatException {
 
-        WorkSheet workSheet = PLAYER_SHEETS.get(player);
+        WorkSheet workSheet;
 
-        if(Objects.isNull(workSheet)){
+//        if(Objects.isNull(workSheet)){
             try {
                 for (Sheet sheet : sheetsService.spreadsheets().get(sheetID).execute().getSheets()) {
                     if(sheet.getProperties().getTitle().equals(sheetName)){
@@ -86,15 +91,14 @@ public class SpreadSheetManager {
             } catch (IOException e) {
                 throw new FileNotFoundException("Invalid SpreadSheet ID");
             }
-        }
-
+//        }
         return false;
     }
 
     public WorkSheet reloadSheet(Player player) throws FileNotFoundException {
-        WorkSheet workSheet = getPlayerSheet(player);
+        WorkSheet workSheet = PLAYER_SHEETS.get(player);
         setPlayerSheet(workSheet.sheetID, workSheet.sheetName, player);
-        return getPlayerSheet(player);
+        return PLAYER_SHEETS.get(player);
     }
 
     public WorkSheet removePlayerSheet(Player player){
