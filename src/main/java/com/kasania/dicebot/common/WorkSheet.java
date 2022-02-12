@@ -72,21 +72,23 @@ public class WorkSheet {
         //col : 3, 11, 19
         for (int col : new int[]{3, 11, 19}) {
             for (int row = 25; row < 44; row++) {
-                String skillName = values.get(row).get(col).toString();
-                if(!skillName.equals("")){
-                    String skillValue = values.get(row).get(col+4).toString().trim();
-                    if(!skillValue.equals("")){
-                        try{
-                            int skillNum = Integer.parseInt(skillValue);
-                            skills.put(skillName,skillNum);
-                        }catch (NumberFormatException e){
-                            throw new NumberFormatException("Invalid data on skill: "+skillName+" row("+(row+1)+"), col("+(col+4)+")");
+                try{
+                    String skillName = values.get(row).get(col).toString();
+                    if(!skillName.equals("")){
+                        String skillValue = values.get(row).get(col+4).toString().trim();
+                        if(!skillValue.equals("")){
+                            try{
+                                int skillNum = Integer.parseInt(skillValue);
+                                skills.put(skillName,skillNum);
+                            }catch (NumberFormatException e){
+                                throw new NumberFormatException("Invalid data on skill: "+skillName+" row("+(row+1)+"), col("+(col+4)+")");
+                            }
+
                         }
-
                     }
-
+                }catch (IndexOutOfBoundsException e){
+                    e.printStackTrace();
                 }
-
             }
         }
     }

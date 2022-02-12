@@ -12,38 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.function.Consumer;
 
 public enum Commands {
-
-//    radd("CoC 7th 시트링크 별명 설정",
-//            """
-//                    !radd [시트링크별명] [시트링크]
-//                    !radd 테스트용별명 https://docs.google.com/spreadsheets/d/1CzAo97L-ioGFHo_d8MC64nxAKiLchd-MkixYL4mxjwE
-//
-//                    * 이 기능은 `TRPG 마스터` 역할이 있어야만 사용 가능합니다. *
-//                    !ruse 명령어에서 사용가능한 시트링크 별명을 설정 할 수 있습니다.
-//                    !radd 명령어로 등록한 시트링크 별명은 !ruse 명령어에서 시트링크와 동일하게 동작합니다."""),
-//
-//
-//    rclear("등록된 CoC 7th 시트 전체 해제",
-//            """
-//                    !rclear\s
-//                    !rclear 테스트용별명
-//
-//                    * 이 기능은 `TRPG 마스터` 역할이 있어야만 사용 가능합니다. *
-//                    !ruse 명령어로 등록된 시트를 전부 등록 해제하는 기능입니다.
-//                    * 현재 서버에서 !ruse 명령어로 등록된 모든 시트를 해제하므로 주의하시기 바랍니다. *"""),
-//
-//    rremove("CoC 7th 시트링크 별명 제거",
-//            """
-//                    !rremove [시트링크별명]
-//                    !rremove 테스트용별명
-//
-//                    * 이 기능은 `TRPG 마스터` 역할이 있어야만 사용 가능합니다. *
-//                    !radd 명령어로 등록한 시트링크 별명을 제거하는 기능입니다."""),
 
 
     rccc("CoC 7th 탐사자 특성치 굴리기",
@@ -58,7 +29,6 @@ public enum Commands {
                     !ruse https://docs.google.com/spreadsheets/d/1CzAo97L-ioGFHo_d8MC64nxAKiLchd-MkixYL4mxjwE 조 종사(Niq)
 
                     !rr 명령에 사용할 CoC 7th 시트를 등록하는 명령어입니다.
-                    구글 스프레드 시트의 링크 또는 !radd 명령을 통해 별명이 지정된 시트의 별명을 사용 할 수 있습니다.
                     등록에 사용할 수 있는 서식은 https://stone-whale.postype.com/post/4912082의 기본 및 now 시트입니다.
                     등록한 시트는 서버 및 개인별로 별도로 저장됩니다."""),
 
@@ -226,7 +196,7 @@ public enum Commands {
         }catch (Exception e){
             logger.error("{}",e.getMessage(),e);
             SimpleEmbedMessage.replyTitleDesc(event,":x: 명령을 실행하는데 실패했습니다.",
-                    "!다이스 "+this.name()+" 명령어를 확인해주세요.");
+                    "!rhelp "+this.name()+" 명령어를 확인해주세요.");
         }
 
     }
