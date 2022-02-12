@@ -43,6 +43,7 @@ public class CoCDice {
         if(args.length<3){
             SimpleEmbedMessage.replyTitleDesc(event,":x: 시트 이름이 누락되었습니다.",
                                     "적절한 시트 이름을 입력해주세요.");
+            return;
         }
 
         StringBuilder stringBuilder = new StringBuilder();
