@@ -86,7 +86,7 @@ public class CoCDice {
         try{
             int value = sheet.getStat(target);
 
-            String query = "(1d100"+expr+")$"+value;
+            String query = "(1d100"+expr+")#"+value;
 
             DiceResult result = new StackDice().calcExpr(query);
             return SimpleEmbedMessage.diceEmbed(result);
