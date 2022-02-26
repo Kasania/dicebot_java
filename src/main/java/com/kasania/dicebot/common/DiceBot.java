@@ -6,16 +6,14 @@
 package com.kasania.dicebot.common;
 
 import com.kasania.dicebot.v1.Commands;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+@Slf4j
 public class DiceBot extends ListenerAdapter {
-
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event)
@@ -25,7 +23,7 @@ public class DiceBot extends ListenerAdapter {
         //DM
         if (event.isFromType(ChannelType.PRIVATE))
         {
-            logger.info("{}, {}", event.getAuthor().getName(),
+            log.info("{}, {}", event.getAuthor().getName(),
                     event.getMessage().getContentDisplay());
         }
         //NON-DM

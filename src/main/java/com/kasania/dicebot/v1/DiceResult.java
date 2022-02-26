@@ -17,7 +17,8 @@ public class DiceResult {
     public String result;
 
     public DiceResult(String query, List<DiceBunch> diceBunches, List<String> judgements) {
-        this.query = query;
+        this.query = query.replace("#","<=")
+                .replace("$",">=");
 
         this.diceBunches = diceBunches;
         this.judgements = judgements;

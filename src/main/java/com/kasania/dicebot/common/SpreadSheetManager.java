@@ -14,8 +14,7 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.kasania.dicebot.v1.Player;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,6 +24,7 @@ import java.nio.file.Path;
 import java.security.GeneralSecurityException;
 import java.util.*;
 
+@Slf4j
 public class SpreadSheetManager {
 
     private static SpreadSheetManager INSTANCE;
@@ -32,8 +32,6 @@ public class SpreadSheetManager {
     private final Map<Player, WorkSheet> PLAYER_SHEETS;
 
     private Sheets sheetsService;
-
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public static SpreadSheetManager getInstance(){
         if(Objects.isNull(INSTANCE)){
@@ -49,19 +47,19 @@ public class SpreadSheetManager {
         //TODO: LOAD
         try {
             GsonFactory gsonFactory = GsonFactory.getDefaultInstance();
-            logger.info("Start SpreadSheetManager");
+            log.info("Start SpreadSheetManager");
             NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 //            InputStream in = ClassLoader.getSystemResource(credentialPath).openStream();
             InputStream in = Files.newInputStream(Path.of(credentialPath));
             ServiceAccountCredentials credentials = ServiceAccountCredentials.fromStream(in);
 
-            logger.info("Start SheetsService");
+            log.info("Start SheetsService");
             sheetsService = new Sheets.Builder(HTTP_TRANSPORT, gsonFactory,new HttpCredentialsAdapter(credentials))
                     .setApplicationName("DiceBot")
                     .build();
 
         } catch (IOException | GeneralSecurityException e) {
-            logger.error("{}",e.getMessage(),e);
+            log.error("{}",e.getMessage(),e);
         }
     }
 

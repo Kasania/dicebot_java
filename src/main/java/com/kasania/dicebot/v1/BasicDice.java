@@ -6,19 +6,17 @@
 package com.kasania.dicebot.v1;
 
 import com.kasania.dicebot.common.SimpleEmbedMessage;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+@Slf4j
 public class BasicDice {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
-    private final Map<Player,Map<String,String>> diceAliases = new HashMap<>();
+        private final Map<Player,Map<String,String>> diceAliases = new HashMap<>();
 
     public void command_r(@NotNull MessageReceivedEvent event){
         String message = event.getMessage().getContentDisplay();
@@ -141,12 +139,12 @@ public class BasicDice {
 
         }
         catch (AssertionError assertionError){
-            logger.error("{}", assertionError.getMessage(),assertionError);
+            log.error("{}", assertionError.getMessage(),assertionError);
             embed = SimpleEmbedMessage.titleDescEmbed(":warning: 주사위 값이 잘못되었습니다.",
                     "주사위의 개수나 값을 조절해 주세요.");
         }
         catch (Exception e){
-            logger.error("{}", e.getMessage(),e);
+            log.error("{}", e.getMessage(),e);
             embed = SimpleEmbedMessage.titleDescEmbed(":x: 지원하지 않는 명령어입니다.",
                     "명령어를 확인해 주세요.");
         }

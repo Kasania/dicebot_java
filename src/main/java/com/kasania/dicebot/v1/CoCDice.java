@@ -11,15 +11,11 @@ import com.kasania.dicebot.common.WorkSheet;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.util.Objects;
 
 public class CoCDice {
-
-    private Logger logger = LoggerFactory.getLogger(getClass());
 
     private static final String GOOGLE_SPREADSHEET_PREFIX = "https://docs.google.com/spreadsheets/d/";
 
@@ -94,7 +90,7 @@ public class CoCDice {
         try{
             int value = sheet.getStat(target);
 
-            String query = "(1d100"+expr+")<"+value;
+            String query = "(1d100"+expr+")<="+value;
 
             DiceResult result = new StackDice().calcExpr(query);
             SimpleEmbedMessage.replyDice(event,result);

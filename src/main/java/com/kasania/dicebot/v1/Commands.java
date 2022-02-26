@@ -6,16 +6,16 @@
 package com.kasania.dicebot.v1;
 
 import com.kasania.dicebot.common.SimpleEmbedMessage;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
+@Slf4j
 public enum Commands {
 
 
@@ -166,7 +166,6 @@ public enum Commands {
 
     }
 
-    private final Logger logger = LoggerFactory.getLogger(Commands.class);
 
     public final String simpleHelpMessage;
     public final String fullHelpMessage;
@@ -189,7 +188,7 @@ public enum Commands {
             channel = event.getTextChannel().getName();
         }
 
-        logger.info("[{}] [{}] {}: {}",
+        log.info("[{}] [{}] {}: {}",
                 event.getGuild().getName(),
                 channel,
                 event.getMember().getEffectiveName(),
@@ -198,7 +197,7 @@ public enum Commands {
         try{
             executors.execute(() -> eventHandler.accept(event));
         }catch (Exception e){
-            logger.error("{}",e.getMessage(),e);
+            log.error("{}",e.getMessage(),e);
             SimpleEmbedMessage.replyTitleDesc(event,":x: 명령을 실행하는데 실패했습니다.",
                     "!rhelp "+this.name()+" 명령어를 확인해주세요.");
         }

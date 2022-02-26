@@ -6,16 +6,12 @@
 package com.kasania.dicebot.common;
 
 import com.google.api.services.sheets.v4.model.ValueRange;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class WorkSheet {
-
-    private final Logger logger = LoggerFactory.getLogger(WorkSheet.class);
 
     public final String sheetID;
     public final String sheetName;
