@@ -16,16 +16,16 @@ import java.util.*;
 @Slf4j
 public class BasicDice {
 
-        private final Map<Player,Map<String,String>> diceAliases = new HashMap<>();
+    private final Map<Player,Map<String,String>> diceAliases = new HashMap<>();
 
-    public void command_r(@NotNull MessageReceivedEvent event){
+    public MessageEmbed command_r(@NotNull MessageReceivedEvent event){
         String message = event.getMessage().getContentDisplay();
         String queryString = message.split(" ")[1];
 
-        event.getMessage().replyEmbeds(rollDice(queryString)).queue();
+        return rollDice(queryString);
     }
 
-    public void command_ra(@NotNull MessageReceivedEvent event){
+    public MessageEmbed command_ra(@NotNull MessageReceivedEvent event){
 
         Player player = Player.fromEvent(event);
         Map<String,String> aliases = diceAliases.get(player);
@@ -42,18 +42,17 @@ public class BasicDice {
 
         aliases.put(name,expr);
 
-        SimpleEmbedMessage.replyTitleDesc(event,"주사위 별명이 등록되었습니다.", name+" -> "+expr);
+        return SimpleEmbedMessage.titleDescEmbed("주사위 별명이 등록되었습니다.", name+" -> "+expr);
     }
 
-    public void command_rt(@NotNull MessageReceivedEvent event){
+    public MessageEmbed command_rt(@NotNull MessageReceivedEvent event){
 
         Player player = Player.fromEvent(event);
         Map<String,String> aliases = diceAliases.get(player);
 
         if(Objects.isNull(aliases) || aliases.size() == 0){
-            SimpleEmbedMessage.replyTitleDesc(event,":x: 등록된 주사위 별명이 없습니다.",
+            return SimpleEmbedMessage.titleDescEmbed(":x: 등록된 주사위 별명이 없습니다.",
                     "!ra 명령을 사용하여 별명을 등록하세요.");
-            return;
         }
 
         String[] messages = event.getMessage().getContentDisplay().split(" ");
@@ -62,9 +61,8 @@ public class BasicDice {
         String queryString = aliases.get(name);
 
         if(Objects.isNull(queryString)){
-            SimpleEmbedMessage.replyTitleDesc(event,":x: 해당 별명으로 등록된 주사위가 없습니다.",
+            return SimpleEmbedMessage.titleDescEmbed(":x: 해당 별명으로 등록된 주사위가 없습니다.",
                     "!ra 명령을 사용하여 별명을 등록하세요.");
-            return;
         }
 
         if(messages.length>2){
@@ -72,18 +70,17 @@ public class BasicDice {
             queryString = aliases.get(name)+expr;
         }
 
-        event.getMessage().replyEmbeds(rollDice(queryString)).queue();
+        return rollDice(queryString);
     }
 
-    public void command_rl(@NotNull MessageReceivedEvent event){
+    public MessageEmbed command_rl(@NotNull MessageReceivedEvent event){
 
         Player player = Player.fromEvent(event);
         Map<String,String> aliases = diceAliases.get(player);
 
         if(Objects.isNull(aliases) || aliases.size() == 0){
-            SimpleEmbedMessage.replyTitleDesc(event,":x: 등록된 주사위 별명이 없습니다.",
+            return SimpleEmbedMessage.titleDescEmbed(":x: 등록된 주사위 별명이 없습니다.",
                     "!ra 명령을 사용하여 별명을 등록하세요.");
-            return;
         }
         StringBuilder registeredDice = new StringBuilder();
         for (Map.Entry<String, String> alias : aliases.entrySet()) {
@@ -93,19 +90,18 @@ public class BasicDice {
                     .append("\n");
         }
 
-        SimpleEmbedMessage.replyTitleDesc(event,"등록된 주사위 별명 목록",
+        return SimpleEmbedMessage.titleDescEmbed("등록된 주사위 별명 목록",
                 registeredDice.toString());
     }
 
-    public void command_rd(@NotNull MessageReceivedEvent event){
+    public MessageEmbed command_rd(@NotNull MessageReceivedEvent event){
 
         Player player = Player.fromEvent(event);
         Map<String,String> aliases = diceAliases.get(player);
 
         if(Objects.isNull(aliases) || aliases.size() == 0){
-            SimpleEmbedMessage.replyTitleDesc(event,":x: 등록된 주사위 별명이 없습니다.",
+            return SimpleEmbedMessage.titleDescEmbed(":x: 등록된 주사위 별명이 없습니다.",
                     "!ra 명령을 사용하여 별명을 등록하세요.");
-            return;
         }
 
         String[] messages = event.getMessage().getContentDisplay().split(" ");
@@ -114,15 +110,13 @@ public class BasicDice {
         String expr = aliases.get(name);
 
         if(Objects.isNull(expr)){
-            SimpleEmbedMessage.replyTitleDesc(event,":x: 해당 별명으로 등록된 주사위가 없습니다.",
+            return SimpleEmbedMessage.titleDescEmbed(":x: 해당 별명으로 등록된 주사위가 없습니다.",
                     "!ra 명령을 사용하여 별명을 등록하세요.");
-            return;
         }
 
         aliases.remove(name);
 
-        SimpleEmbedMessage.replyTitleDesc(event,"주사위 별명이 제거되었습니다.",
-                name+" -> "+expr);
+        return SimpleEmbedMessage.titleDescEmbed("주사위 별명이 제거되었습니다.",name+" -> "+expr);
     }
 
 

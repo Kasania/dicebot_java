@@ -3,7 +3,7 @@
 <configuration status="debug">
 
     <Properties>
-    <Property name="layoutPattern">%d{yyyy-MM-dd hh:mm:ss} %5p [%c] %m%n</Property>
+    <Property name="layoutPattern">%d{yyyy-MM-dd hh:mm:ss} %5p  %m%n</Property>
     </Properties>
 
     <Appenders>

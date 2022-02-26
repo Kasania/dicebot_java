@@ -14,16 +14,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class SimpleEmbedMessage {
 
-    public static void replyTitleDesc(@NotNull MessageReceivedEvent event,String title, String... desc){
-        event.getMessage().replyEmbeds(SimpleEmbedMessage.titleDescEmbed(title,String.join("\n",desc))).queue();
-    }
-
     public static void replyTitleDesc(@NotNull MessageReceivedEvent event,String title, String desc){
         event.getMessage().replyEmbeds(SimpleEmbedMessage.titleDescEmbed(title,desc)).queue();
     }
 
-    public static void replyDice(@NotNull MessageReceivedEvent event, DiceResult result){
-        event.getMessage().replyEmbeds(SimpleEmbedMessage.diceEmbed(result)).queue();
+    public static MessageEmbed titleDescEmbed(String title, String... desc){
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setTitle(title);
+        embed.setDescription(String.join("\n",desc));
+        return embed.build();
     }
 
     public static MessageEmbed titleDescEmbed(String title, String desc){

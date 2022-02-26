@@ -8,12 +8,14 @@ package com.kasania.dicebot.v1;
 import com.kasania.dicebot.common.SimpleEmbedMessage;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 @Slf4j
 public enum Commands {
@@ -142,24 +144,19 @@ public enum Commands {
                 for (Commands command : commands) {
                     embed.addField(command.name(), command.simpleHelpMessage, false);
                 }
-
-                event.getMessage().replyEmbeds(embed.build()).queue();
+                return embed.build();
 
             }else{
                 //rhlep with parameter
                 String target = args[1];
                 for (Commands command : commands) {
                     if(command.name().equals(target)){
-                        SimpleEmbedMessage.replyTitleDesc(event, command.name()+" 명령어 사용법",
+                        return SimpleEmbedMessage.titleDescEmbed(command.name()+" 명령어 사용법",
                                 command.fullHelpMessage);
-                        return;
                     }
                 }
-
-                SimpleEmbedMessage.replyTitleDesc(event,":x: 해당 명령어가 존재하지 않습니다.", "명령어를 확인해주세요.");
-
+                return SimpleEmbedMessage.titleDescEmbed(":x: 해당 명령어가 존재하지 않습니다.", "명령어를 확인해주세요.");
             }
-
         };
 
         executors = Executors.newCachedThreadPool();
@@ -170,7 +167,7 @@ public enum Commands {
     public final String simpleHelpMessage;
     public final String fullHelpMessage;
 
-    private Consumer<MessageReceivedEvent> eventHandler;
+    private Function<MessageReceivedEvent, MessageEmbed> eventHandler;
     private final static ExecutorService executors;
 
     //TODO : fullHelpMessage improve
@@ -188,14 +185,21 @@ public enum Commands {
             channel = event.getTextChannel().getName();
         }
 
-        log.info("[{}] [{}] {}: {}",
-                event.getGuild().getName(),
-                channel,
-                event.getMember().getEffectiveName(),
-                event.getMessage().getContentDisplay());
+
 
         try{
-            executors.execute(() -> eventHandler.accept(event));
+
+            executors.execute(() -> {
+                MessageEmbed result = eventHandler.apply(event);
+                log.info("[{}] [{}] {}: {} -> {}",
+                        event.getGuild().getName(),
+                        channel,
+                        event.getMember().getEffectiveName(),
+                        event.getMessage().getContentDisplay(),
+                        result.getTitle()
+                        );
+                event.getMessage().replyEmbeds(result).queue();
+            });
         }catch (Exception e){
             log.error("{}",e.getMessage(),e);
             SimpleEmbedMessage.replyTitleDesc(event,":x: 명령을 실행하는데 실패했습니다.",

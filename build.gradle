@@ -13,7 +13,7 @@ repositories {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-    implementation("net.dv8tion:JDA:5.0.0-alpha.5") {
+    implementation("net.dv8tion:JDA:5.0.0-alpha.9") {
         exclude module: 'opus-java'
     }
     implementation 'com.google.api-client:google-api-client:1.32.2'
