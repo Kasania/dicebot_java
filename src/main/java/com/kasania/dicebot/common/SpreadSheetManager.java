@@ -42,14 +42,13 @@ public class SpreadSheetManager {
 
 
     private SpreadSheetManager(String credentialPath){
-        PLAYER_SHEETS = new HashMap<>();
+        PLAYER_SHEETS = Collections.synchronizedMap(new HashMap<>());
 
         //TODO: LOAD
         try {
             GsonFactory gsonFactory = GsonFactory.getDefaultInstance();
             log.info("Start SpreadSheetManager");
             NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-//            InputStream in = ClassLoader.getSystemResource(credentialPath).openStream();
             InputStream in = Files.newInputStream(Path.of(credentialPath));
             ServiceAccountCredentials credentials = ServiceAccountCredentials.fromStream(in);
 
