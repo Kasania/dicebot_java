@@ -38,6 +38,34 @@ public class DiceBunch {
         }
     }
 
+    public void dropHigh(){
+        long value = Long.parseLong(dices.get(0));
+        int pos = 1;
+        for (int i = 1; i < dices.size(); i++) {
+            long currentValue = Long.parseLong(dices.get(i));
+            if(value < currentValue){
+                value = currentValue;
+                pos = i;
+            }
+
+        }
+        dices.remove(pos);
+    }
+
+    public void dropLow(){
+        long value = Long.parseLong(dices.get(0));;
+        int pos = 0;
+        for (int i = 1; i < dices.size(); i++) {
+            long currentValue = Long.parseLong(dices.get(i));
+            if(value > currentValue){
+                value = currentValue;
+                pos = i;
+            }
+
+        }
+        dices.remove(pos);
+    }
+
     @Override
     public String toString() {
         return "DiceResult{" +

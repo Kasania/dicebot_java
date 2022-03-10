@@ -20,6 +20,11 @@ import java.util.function.Function;
 @Slf4j
 public enum Commands {
 
+    rdnd("DnD 5th 능력치 굴리기",
+            """
+                    !rdnd\s
+
+                    DnD 5th 캐릭터의 생성에 필요한 능력치 주사위를 굴리는 기능입니다."""),
 
     rccc("CoC 7th 탐사자 특성치 굴리기",
             """
@@ -131,6 +136,8 @@ public enum Commands {
         rstat.eventHandler = cocDice::command_rstat;
         rccc.eventHandler = cocDice::command_rccc;
 
+        DnDDice dnDDice = new DnDDice();
+        rdnd.eventHandler = dnDDice::command_rDnD;
 
         rhelp.eventHandler = event -> {
             String[] args = event.getMessage().getContentDisplay().split(" ");
@@ -185,10 +192,7 @@ public enum Commands {
             channel = event.getTextChannel().getName();
         }
 
-
-
         try{
-
             executors.execute(() -> {
                 MessageEmbed result = eventHandler.apply(event);
                 log.info("[{}] [{}] {}: {} -> {}",
