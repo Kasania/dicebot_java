@@ -66,7 +66,7 @@ public class SpreadSheetManager {
 
     public WorkSheet getPlayerSheet(Player player) {
         try {
-            return reloadSheet(player);
+            return reloadWorkSheet(player);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -77,13 +77,10 @@ public class SpreadSheetManager {
 
         WorkSheet workSheet;
 
-//        if(Objects.isNull(workSheet)){
-
         try {
             List<Sheet> sheets = PLAYER_SHEETS.get(sheetID);
             if (sheets == null) {
-                PLAYER_SHEETS.put(sheetID, sheetsService.spreadsheets().get(sheetID).execute().getSheets());
-                sheets = PLAYER_SHEETS.get(sheetID);
+                sheets = forceReloadSheet(sheetID);
             }
 
             for (Sheet sheet : sheets) {
@@ -97,14 +94,30 @@ public class SpreadSheetManager {
         } catch (IOException e) {
             throw new FileNotFoundException("Invalid SpreadSheet ID");
         }
-//        }
         return false;
     }
 
-    public WorkSheet reloadSheet(Player player) throws FileNotFoundException {
+    public WorkSheet reloadWorkSheet(Player player) throws FileNotFoundException {
         WorkSheet workSheet = PLAYER_WORKSHEETS.get(player);
-        setPlayerSheet(workSheet.sheetID, workSheet.sheetName, player);
+        boolean success = setPlayerSheet(workSheet.sheetID, workSheet.sheetName, player);
+        if(!success){
+            try {
+                forceReloadSheet(workSheet.sheetID);
+            } catch (IOException e) {
+                throw new FileNotFoundException("Invalid SpreadSheet ID");
+            }
+            setPlayerSheet(workSheet.sheetID, workSheet.sheetName, player);
+        }
         return PLAYER_WORKSHEETS.get(player);
+    }
+
+    public List<Sheet> forceReloadSheet(String sheetID) throws FileNotFoundException {
+        try {
+            PLAYER_SHEETS.put(sheetID, sheetsService.spreadsheets().get(sheetID).execute().getSheets());
+        } catch (IOException e) {
+            throw new FileNotFoundException("Invalid SpreadSheet ID");
+        }
+        return PLAYER_SHEETS.get(sheetID);
     }
 
     public WorkSheet removePlayerSheet(Player player) {

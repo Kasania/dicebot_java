@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Objects;
 
 public class CoCDice {
@@ -49,6 +50,14 @@ public class CoCDice {
         String sheetName = stringBuilder.toString().trim();
 
         try {
+            SpreadSheetManager.getInstance().forceReloadSheet(sheetID);
+        } catch (IOException e) {
+            return SimpleEmbedMessage.titleDescEmbed(":x: 올바르지 않은 시트 링크입니다.",
+                    "적절한 시트 링크를 입력해주세요.");
+        }
+
+        try {
+
             boolean success = SpreadSheetManager.getInstance().setPlayerSheet(sheetID, sheetName, player);
 
             if(!success){
