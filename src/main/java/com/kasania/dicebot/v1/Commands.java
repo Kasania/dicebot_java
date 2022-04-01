@@ -78,6 +78,14 @@ public enum Commands {
                     각 연산사이에 사칙, 비교연산자를 사용하여 연결할 수 있으며, 비교 연산 후에는 성공/실패에 따라 값이 1/0으로 처리됩니다.
                     NdRhX 혹은 NdRlX 연산시에 d와 h 사이에 추가적인 연산을 하는 경우, 올바르지 않은 값이 출력될 수 있습니다."""),
 
+
+    rw("단어 고르기 명령어",
+            """
+                    !rw [단어 1] [단어 2] [단어 3] ...
+                    !rw 소고기 돼지고기 닭고기 양고기
+                    
+                    NdRhX 혹은 NdRlX 연산시에 d와 h 사이에 추가적인 연산을 하는 경우, 올바르지 않은 값이 출력될 수 있습니다."""),
+
     ra("주사위 표현식 별명 설정",
             """
                     !ra [별명] [주사위 표현식]
@@ -105,11 +113,11 @@ public enum Commands {
 
     rt("별명이 지정된 주사위 표현식 굴리기",
                     """
-                    !rhelp
-                    !rhelp r
-                    !rhelp ruse
+                    !rt [별명] (주사위 표현식)
+                    !rt crit
+                    !rt atk 16
 
-                    사용가능한 명령어를 출력하거나, 각 명령어들의 상세 사용법을 출력합니다."""),
+                    !ra 명령어로 지정한 주사위 표헌식 별명을 굴립니다."""),
 
     rhelp("도움말 출력",
             """
@@ -124,6 +132,7 @@ public enum Commands {
 
         BasicDice basicDice = new BasicDice();
         r.eventHandler = basicDice::command_r;
+        rw.eventHandler = basicDice::command_rw;
         ra.eventHandler = basicDice::command_ra;
         rd.eventHandler = basicDice::command_rd;
         rl.eventHandler = basicDice::command_rl;
@@ -154,7 +163,7 @@ public enum Commands {
                 return embed.build();
 
             }else{
-                //rhlep with parameter
+                //rhelp with parameter
                 String target = args[1];
                 for (Commands command : commands) {
                     if(command.name().equals(target)){

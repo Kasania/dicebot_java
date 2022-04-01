@@ -23,4 +23,14 @@ public class DiceResult {
         this.diceBunches = diceBunches;
         this.judgements = judgements;
     }
+
+    @Override
+    public String toString() {
+        return "DiceResult{" +
+                "query='" + query + '\'' +
+                ", diceBunches=" + diceBunches +
+                ", judgements=" + judgements +
+                ", result='" + result + '\'' +
+                '}';
+    }
 }

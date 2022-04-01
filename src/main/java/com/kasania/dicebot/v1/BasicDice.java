@@ -45,6 +45,21 @@ public class BasicDice {
         return SimpleEmbedMessage.titleDescEmbed("주사위 별명이 등록되었습니다.", name+" -> "+expr);
     }
 
+    public MessageEmbed command_rw(@NotNull MessageReceivedEvent event){
+
+        String message = event.getMessage().getContentDisplay();
+        String[] args = message.split(" ");
+
+        int elementSize = args.length - 1;
+
+        String query = "1d"+elementSize;
+
+        DiceResult result = new StackDice().calcExpr(query);
+        return SimpleEmbedMessage.titleDescEmbed(":game_die: 결과 : " + args[Integer.parseInt(result.result)],
+                result.query + "=" + result.result);
+
+    }
+
     public MessageEmbed command_rt(@NotNull MessageReceivedEvent event){
 
         Player player = Player.fromEvent(event);

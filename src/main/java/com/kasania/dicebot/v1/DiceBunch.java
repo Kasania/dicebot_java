@@ -40,7 +40,7 @@ public class DiceBunch {
 
     public void dropHigh(){
         long value = Long.parseLong(dices.get(0));
-        int pos = 1;
+        int pos = 0;
         for (int i = 1; i < dices.size(); i++) {
             long currentValue = Long.parseLong(dices.get(i));
             if(value < currentValue){
@@ -53,7 +53,7 @@ public class DiceBunch {
     }
 
     public void dropLow(){
-        long value = Long.parseLong(dices.get(0));;
+        long value = Long.parseLong(dices.get(0));
         int pos = 0;
         for (int i = 1; i < dices.size(); i++) {
             long currentValue = Long.parseLong(dices.get(i));
