@@ -61,8 +61,8 @@ public class CoCDice {
             boolean success = SpreadSheetManager.getInstance().setPlayerSheet(sheetID, sheetName, player);
 
             if(!success){
-                return SimpleEmbedMessage.titleDescEmbed(":x: 올바르지 않은 시트 이름입니다.",
-                        "적절한 시트 이름을 입력해주세요.");
+                return SimpleEmbedMessage.titleDescEmbed(":x: 시트를 인식하는데 실패했습니다.",
+                        "적절한 시트 이름 또는 형식을 입력해주세요.");
             }
 
         } catch (FileNotFoundException e) {
@@ -98,12 +98,45 @@ public class CoCDice {
             String query = "(1d100"+expr+")#"+value;
 
             DiceResult result = new StackDice().calcExpr(query);
-            return SimpleEmbedMessage.diceEmbed(result);
+            return SimpleEmbedMessage.diceEmbed(judgement(result, value));
 
         }catch (IllegalArgumentException e){
+            System.out.println(e);
             return SimpleEmbedMessage.titleDescEmbed(":x: 해당 이름의 특성/기능이 없습니다.",
                     "명령어를 확인해주세요.");
         }
+    }
+
+    private DiceResult judgement(DiceResult result, int target){
+        int diceValue = Integer.parseInt(result.judgements.get(0).split("<=")[0]);
+
+        if(diceValue == 100){
+            result.result = "100!!!";
+        }
+        else if(diceValue > target){
+            if(target < 50 && diceValue >= 96){
+                result.result = "대실패";
+            }
+            else{
+                result.result = "실패";
+            }
+        }
+        else if(target / 2 < diceValue ){
+            result.result = "성공";
+        }
+        else if(target / 5 < diceValue ){
+            result.result = "어려운 성공";
+        }
+        else if(target / 5 >= diceValue ){
+            if(diceValue == 1){
+                result.result = "1!!!";
+            }
+            else{
+                result.result = "극단적 성공";
+            }
+        }
+
+        return result;
     }
 
     public MessageEmbed command_rdel(@NotNull MessageReceivedEvent event){
