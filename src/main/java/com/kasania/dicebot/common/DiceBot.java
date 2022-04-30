@@ -8,6 +8,7 @@ package com.kasania.dicebot.common;
 import com.kasania.dicebot.v1.Commands;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -20,17 +21,24 @@ public class DiceBot extends ListenerAdapter {
     {
         if(event.getAuthor().isBot()) return;
 
+        System.out.println(event.getMessage().getGuild().getId());
         //DM
         if (event.isFromType(ChannelType.PRIVATE))
         {
-            log.info("{}, {}", event.getAuthor().getName(),
-                    event.getMessage().getContentDisplay());
+            log.info("{}, {}, {}", event.getAuthor().getName(),
+                    event.getMessage().getContentDisplay(),  event.getAuthor().getAsMention());
         }
         //NON-DM
         else
         {
             handleMessage(event);
         }
+    }
+
+    @Override
+    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+        super.onSlashCommandInteraction(event);
+        System.out.println(event.getName());
     }
 
     public void handleMessage(@NotNull MessageReceivedEvent event){
@@ -47,6 +55,10 @@ public class DiceBot extends ListenerAdapter {
                 return;
             }
         }
+    }
+
+    public void handleEvent(){
+
     }
 
 }
