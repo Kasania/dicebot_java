@@ -27,30 +27,21 @@ public class CoCDice {
 
         String message = event.getMessage().getContentDisplay();
         String[] args = message.split(" ");
-        String sheetID;
+        String spreadSheetId;
+        int sheetId;
         if(args[1].startsWith(GOOGLE_SPREADSHEET_PREFIX)){
             String link = args[1].replace(GOOGLE_SPREADSHEET_PREFIX,"");
-            sheetID = link.split("/")[0];
+            String[] data = link.split("/");
+            spreadSheetId = data[0];
+            sheetId = Integer.parseInt(data[1].split("=")[1]);
         }
         else{
             return SimpleEmbedMessage.titleDescEmbed(":x: 올바르지 않은 시트 링크입니다.",
                     "적절한 시트 링크를 입력해주세요.");
         }
 
-        if(args.length<3){
-            return SimpleEmbedMessage.titleDescEmbed(":x: 시트 이름이 누락되었습니다.",
-                    "적절한 시트 이름을 입력해주세요.");
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for (int i = 2; i < args.length; i++) {
-            stringBuilder.append(args[i]).append(" ");
-        }
-        String sheetName = stringBuilder.toString().trim();
-
         try {
-            SpreadSheetManager.getInstance().forceReloadSheet(sheetID);
+            SpreadSheetManager.getInstance().forceReloadSheet(spreadSheetId);
         } catch (IOException e) {
             return SimpleEmbedMessage.titleDescEmbed(":x: 올바르지 않은 시트 링크입니다.",
                     "적절한 시트 링크를 입력해주세요.");
@@ -58,7 +49,7 @@ public class CoCDice {
 
         try {
 
-            boolean success = SpreadSheetManager.getInstance().setPlayerSheet(sheetID, sheetName, player);
+            boolean success = SpreadSheetManager.getInstance().setPlayerSheet(spreadSheetId, sheetId, player);
 
             if(!success){
                 return SimpleEmbedMessage.titleDescEmbed(":x: 시트를 인식하는데 실패했습니다.",
@@ -75,7 +66,7 @@ public class CoCDice {
 
         WorkSheet sheet = SpreadSheetManager.getInstance().getPlayerSheet(player);
         return SimpleEmbedMessage.titleDescEmbed(":o: 시트 등록 성공!",
-                                "지금부터 "+sheet.characterName + " 탐사자로 플레이합니다.");
+                "지금부터 "+sheet.characterName + " 탐사자로 플레이합니다.");
     }
 
     public MessageEmbed command_rr(@NotNull MessageReceivedEvent event){
@@ -101,7 +92,6 @@ public class CoCDice {
             return SimpleEmbedMessage.diceEmbed(judgement(result, value));
 
         }catch (IllegalArgumentException e){
-            System.out.println(e);
             return SimpleEmbedMessage.titleDescEmbed(":x: 해당 이름의 특성/기능이 없습니다.",
                     "명령어를 확인해주세요.");
         }
@@ -164,7 +154,7 @@ public class CoCDice {
         else{
             return SimpleEmbedMessage.titleDescEmbed("현재 \"" + sheet.characterName + "\" 탐사자로 플레이하고 있습니다.",
                     "시트 링크",
-                    GOOGLE_SPREADSHEET_PREFIX+sheet.sheetID + " # "+sheet.sheetName);
+                    GOOGLE_SPREADSHEET_PREFIX+sheet.spreadSheetID + " # "+sheet.sheetName);
         }
     }
 

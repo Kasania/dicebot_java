@@ -13,7 +13,8 @@ import java.util.Map;
 
 public class WorkSheet {
 
-    public final String sheetID;
+    public final String spreadSheetID;
+    public final int sheetID;
     public final String sheetName;
 
     public final String characterName;
@@ -35,12 +36,14 @@ public class WorkSheet {
             "이성", "15:21");
 
 
-    public WorkSheet(String sheetID, String sheetName, ValueRange valueRange) throws NumberFormatException{
+    public WorkSheet(String spreadSheetID, int sheetID, String sheetName, ValueRange valueRange) throws NumberFormatException{
+
         traits = new HashMap<>();
         skills = new HashMap<>();
 
-        this.sheetID = sheetID;
+        this.spreadSheetID = spreadSheetID;
         this.sheetName = sheetName;
+        this.sheetID = sheetID;
         values = valueRange.getValues();
         characterName = values.get(6).get(4).toString();
 

@@ -73,20 +73,21 @@ public class SpreadSheetManager {
         return PLAYER_WORKSHEETS.get(player);
     }
 
-    public boolean setPlayerSheet(String sheetID, String sheetName, Player player) throws FileNotFoundException, NumberFormatException {
+    public boolean setPlayerSheet(String spreadSheetId, int sheetId, Player player) throws FileNotFoundException, NumberFormatException {
 
         WorkSheet workSheet;
 
         try {
-            List<Sheet> sheets = PLAYER_SHEETS.get(sheetID);
+            List<Sheet> sheets = PLAYER_SHEETS.get(spreadSheetId);
             if (sheets == null) {
-                sheets = forceReloadSheet(sheetID);
+                sheets = forceReloadSheet(spreadSheetId);
             }
 
             for (Sheet sheet : sheets) {
-                if (sheet.getProperties().getTitle().equals(sheetName)) {
-                    ValueRange valueRange = sheetsService.spreadsheets().values().get(sheetID, sheetName).execute();
-                    workSheet = new WorkSheet(sheetID, sheetName, valueRange);
+                if(sheet.getProperties().getSheetId().equals(sheetId)){
+                    String sheetName = sheet.getProperties().getTitle();
+                    ValueRange valueRange = sheetsService.spreadsheets().values().get(spreadSheetId, sheetName).execute();
+                    workSheet = new WorkSheet(spreadSheetId, sheetId, sheetName, valueRange);
                     PLAYER_WORKSHEETS.put(player, workSheet);
                     return true;
                 }
@@ -99,14 +100,14 @@ public class SpreadSheetManager {
 
     public WorkSheet reloadWorkSheet(Player player) throws FileNotFoundException {
         WorkSheet workSheet = PLAYER_WORKSHEETS.get(player);
-        boolean success = setPlayerSheet(workSheet.sheetID, workSheet.sheetName, player);
+        boolean success = setPlayerSheet(workSheet.spreadSheetID, workSheet.sheetID, player);
         if(!success){
             try {
-                forceReloadSheet(workSheet.sheetID);
+                forceReloadSheet(workSheet.spreadSheetID);
             } catch (IOException e) {
                 throw new FileNotFoundException("Invalid SpreadSheet ID");
             }
-            setPlayerSheet(workSheet.sheetID, workSheet.sheetName, player);
+            setPlayerSheet(workSheet.spreadSheetID, workSheet.sheetID, player);
         }
         return PLAYER_WORKSHEETS.get(player);
     }
