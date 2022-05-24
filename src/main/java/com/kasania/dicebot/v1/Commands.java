@@ -204,17 +204,32 @@ public enum Commands {
 
         try{
             executors.execute(() -> {
-                MessageEmbed result = eventHandler.apply(event);
-                log.info("[{}] [{}] {}: {} -> {}",
-                        event.getGuild().getName(),
-                        channel,
-                        event.getMember().getEffectiveName(),
-                        event.getMessage().getContentDisplay(),
-                        result.getTitle()
-                        );
-                event.getMessage().replyEmbeds(result).queue();
+                try{
+                    MessageEmbed result = eventHandler.apply(event);
+                    log.info("[{}] [{}] {}: {} -> {}",
+                            event.getGuild().getName(),
+                            channel,
+                            event.getMember().getEffectiveName(),
+                            event.getMessage().getContentDisplay(),
+                            result.getTitle()
+                    );
+                    event.getMessage().replyEmbeds(result).queue();
+                }catch (Exception e){
+                    log.info("[{}] [{}] {}: {} -> {}",
+                            event.getGuild().getName(),
+                            channel,
+                            event.getMember().getEffectiveName(),
+                            event.getMessage().getContentDisplay(),
+                            "Execution Fail"
+                    );
+                    log.error("{}",e.getMessage(),e);
+                    SimpleEmbedMessage.replyTitleDesc(event,":x: 명령을 실행하는데 실패했습니다.",
+                            "!rhelp "+this.name()+" 명령어를 확인해주세요.");
+                }
+
             });
         }catch (Exception e){
+            System.out.println("testaaaa");
             log.error("{}",e.getMessage(),e);
             SimpleEmbedMessage.replyTitleDesc(event,":x: 명령을 실행하는데 실패했습니다.",
                     "!rhelp "+this.name()+" 명령어를 확인해주세요.");
