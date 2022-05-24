@@ -64,7 +64,7 @@ public class SpreadSheetManager {
         }
     }
 
-    public WorkSheet getPlayerSheet(Player player) {
+    public synchronized WorkSheet getPlayerSheet(Player player) {
         try {
             return reloadWorkSheet(player);
         } catch (FileNotFoundException e) {
@@ -73,7 +73,7 @@ public class SpreadSheetManager {
         return PLAYER_WORKSHEETS.get(player);
     }
 
-    public boolean setPlayerSheet(String spreadSheetId, int sheetId, Player player) throws FileNotFoundException, NumberFormatException {
+    public synchronized boolean setPlayerSheet(String spreadSheetId, int sheetId, Player player) throws FileNotFoundException, NumberFormatException {
 
         WorkSheet workSheet;
 
@@ -98,7 +98,7 @@ public class SpreadSheetManager {
         return false;
     }
 
-    public WorkSheet reloadWorkSheet(Player player) throws FileNotFoundException {
+    public synchronized WorkSheet reloadWorkSheet(Player player) throws FileNotFoundException {
         WorkSheet workSheet = PLAYER_WORKSHEETS.get(player);
         boolean success = setPlayerSheet(workSheet.spreadSheetID, workSheet.sheetID, player);
         if(!success){
