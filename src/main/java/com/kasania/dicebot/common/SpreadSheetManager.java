@@ -65,7 +65,8 @@ public class SpreadSheetManager {
     }
 
     public synchronized WorkSheet getPlayerSheet(Player player) {
-        log.info(player + ":" + PLAYER_WORKSHEETS);
+        log.info(String.valueOf(player));
+        log.info(String.valueOf(PLAYER_WORKSHEETS));
         try {
             return reloadWorkSheet(player);
         } catch (FileNotFoundException e) {

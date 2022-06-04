@@ -10,6 +10,7 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class WorkSheet {
 
@@ -108,4 +109,25 @@ public class WorkSheet {
         return stats;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WorkSheet workSheet = (WorkSheet) o;
+        return sheetID == workSheet.sheetID && spreadSheetID.equals(workSheet.spreadSheetID) && sheetName.equals(workSheet.sheetName) && characterName.equals(workSheet.characterName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(spreadSheetID, sheetID, sheetName, characterName);
+    }
+
+    @Override
+    public String toString() {
+        return "WorkSheet{" +
+                "sheetID=" + sheetID +
+                ", sheetName='" + sheetName + '\'' +
+                ", characterName='" + characterName + '\'' +
+                '}';
+    }
 }
