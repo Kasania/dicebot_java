@@ -15,8 +15,8 @@ public class Player {
     public final String GuildID;
     public final String MentionID;
 
-    public static Player fromEvent(@NotNull MessageReceivedEvent event){
-        return new Player(event.getGuild().getId(),event.getMember().getAsMention());
+    public synchronized static Player fromEvent(@NotNull MessageReceivedEvent event){
+        return new Player(event.getGuild().getId(), event.getMember().getAsMention());
     }
 
     public Player(String guildID, String mentionID) {

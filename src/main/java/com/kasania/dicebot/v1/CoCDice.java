@@ -33,7 +33,8 @@ public class CoCDice {
             String link = args[1].replace(GOOGLE_SPREADSHEET_PREFIX,"");
             String[] data = link.split("/");
             spreadSheetId = data[0];
-            sheetId = Integer.parseInt(data[1].split("=")[1]);
+            //TODO: 멀티프로필 지원
+            sheetId = Integer.parseInt(data[1].split("gid=")[1]);
         }
         else{
             return SimpleEmbedMessage.titleDescEmbed(":x: 올바르지 않은 시트 링크입니다.",

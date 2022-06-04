@@ -65,6 +65,7 @@ public class SpreadSheetManager {
     }
 
     public synchronized WorkSheet getPlayerSheet(Player player) {
+        log.info(player + ":" + PLAYER_WORKSHEETS);
         try {
             return reloadWorkSheet(player);
         } catch (FileNotFoundException e) {
@@ -112,7 +113,7 @@ public class SpreadSheetManager {
         return PLAYER_WORKSHEETS.get(player);
     }
 
-    public List<Sheet> forceReloadSheet(String sheetID) throws FileNotFoundException {
+    public synchronized List<Sheet> forceReloadSheet(String sheetID) throws FileNotFoundException {
         try {
             PLAYER_SHEETS.put(sheetID, sheetsService.spreadsheets().get(sheetID).execute().getSheets());
         } catch (IOException e) {
