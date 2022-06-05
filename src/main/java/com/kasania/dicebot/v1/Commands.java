@@ -36,9 +36,10 @@ public enum Commands {
             """
                     !ruse [시트링크]
                     !ruse https://docs.google.com/spreadsheets/d/1CzAo97L-ioGFHo_d8MC64nxAKiLchd-MkixYL4mxjwE/edit#gid=2107011865
+                    !ruse https://docs.google.com/spreadsheets/d/1CzAo97L-ioGFHo_d8MC64nxAKiLchd-MkixYL4mxjwE 조 종사(Niq)
 
                     !rr 명령에 사용할 CoC 7th 시트를 등록하는 명령어입니다.
-                    **"gid=2107011865"** 부분이 반드시 포함되어야 합니다
+                    **"gid=???"** 부분이나 시트 이름이 반드시 포함되어야 합니다. gid뒤의 숫자부분은 시트페이지마다 다르며, 고유한 값입니다.
                     등록에 사용할 수 있는 서식은 https://stone-whale.postype.com/post/4912082의 기본 및 now 시트입니다.
                     등록한 시트는 서버 및 개인별로 별도로 저장됩니다."""),
 

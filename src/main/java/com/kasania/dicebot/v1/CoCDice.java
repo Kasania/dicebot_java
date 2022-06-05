@@ -28,13 +28,22 @@ public class CoCDice {
         String message = event.getMessage().getContentDisplay();
         String[] args = message.split(" ");
         String spreadSheetId;
-        int sheetId;
+        String sheetName = null;
+        int sheetId = -1;
         if(args[1].startsWith(GOOGLE_SPREADSHEET_PREFIX)){
             String link = args[1].replace(GOOGLE_SPREADSHEET_PREFIX,"");
             String[] data = link.split("/");
             spreadSheetId = data[0];
             //TODO: 멀티프로필 지원
-            sheetId = Integer.parseInt(data[1].split("gid=")[1]);
+            if(data.length>1){
+                sheetId = Integer.parseInt(data[1].split("gid=")[1]);
+            }else{
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int i = 2; i < args.length; i++) {
+                    stringBuilder.append(args[i]).append(" ");
+                }
+                sheetName = stringBuilder.toString().trim();
+            }
         }
         else{
             return SimpleEmbedMessage.titleDescEmbed(":x: 올바르지 않은 시트 링크입니다.",
@@ -42,6 +51,11 @@ public class CoCDice {
         }
 
         try {
+            if(sheetId == -1){
+                System.out.println(sheetName);
+                sheetId = SpreadSheetManager.getInstance().getSheetId(spreadSheetId, sheetName);
+            }
+
             SpreadSheetManager.getInstance().forceReloadSheet(spreadSheetId);
         } catch (IOException e) {
             return SimpleEmbedMessage.titleDescEmbed(":x: 올바르지 않은 시트 링크입니다.",

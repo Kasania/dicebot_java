@@ -64,6 +64,17 @@ public class SpreadSheetManager {
         }
     }
 
+    public synchronized int getSheetId(String spreadSheetId, String sheetName) throws IOException {
+        List<Sheet> sheets = sheetsService.spreadsheets().get(spreadSheetId).execute().getSheets();
+
+        for (Sheet sheet : sheets) {
+            if(sheet.getProperties().getTitle().equals(sheetName)){
+                return sheet.getProperties().getSheetId();
+            }
+        }
+        throw new FileNotFoundException("존재하지 않는 시트 이름");
+    }
+
     public synchronized WorkSheet getPlayerSheet(Player player) {
         log.info(String.valueOf(player));
         log.info(String.valueOf(PLAYER_WORKSHEETS));
@@ -114,13 +125,13 @@ public class SpreadSheetManager {
         return PLAYER_WORKSHEETS.get(player);
     }
 
-    public synchronized List<Sheet> forceReloadSheet(String sheetID) throws FileNotFoundException {
+    public synchronized List<Sheet> forceReloadSheet(String spreadSheetID) throws FileNotFoundException {
         try {
-            PLAYER_SHEETS.put(sheetID, sheetsService.spreadsheets().get(sheetID).execute().getSheets());
+            PLAYER_SHEETS.put(spreadSheetID, sheetsService.spreadsheets().get(spreadSheetID).execute().getSheets());
         } catch (IOException e) {
             throw new FileNotFoundException("Invalid SpreadSheet ID");
         }
-        return PLAYER_SHEETS.get(sheetID);
+        return PLAYER_SHEETS.get(spreadSheetID);
     }
 
     public WorkSheet removePlayerSheet(Player player) {
