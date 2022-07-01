@@ -13,15 +13,15 @@ import java.util.Objects;
 public class Player {
 
     public final String GuildID;
-    public final String MentionID;
+    public final String authorID;
 
-    public synchronized static Player fromEvent(@NotNull MessageReceivedEvent event){
-        return new Player(event.getGuild().getId(), event.getMember().getAsMention());
+    public synchronized static Player fromEvent(@NotNull MessageReceivedEvent event) {
+        return new Player(event.getGuild().getId(), event.getAuthor().getId());
     }
 
-    public Player(String guildID, String mentionID) {
+    public Player(String guildID, String authorID) {
         GuildID = guildID;
-        MentionID = mentionID;
+        this.authorID = authorID;
     }
 
     @Override
@@ -29,19 +29,19 @@ public class Player {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Player player = (Player) o;
-        return Objects.equals(GuildID, player.GuildID) && Objects.equals(MentionID, player.MentionID);
+        return Objects.equals(GuildID, player.GuildID) && Objects.equals(authorID, player.authorID);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(GuildID, MentionID);
+        return Objects.hash(GuildID, authorID);
     }
 
     @Override
     public String toString() {
         return "Player{" +
                 "GuildID='" + GuildID + '\'' +
-                ", MentionID='" + MentionID + '\'' +
+                ", authorID='" + authorID + '\'' +
                 '}';
     }
 }
