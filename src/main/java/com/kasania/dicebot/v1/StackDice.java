@@ -131,8 +131,22 @@ public class StackDice {
                 }
                 DiceBunch result = rollDice(n2,n1);
                 diceResult.diceBunches.add(result);
-                valStack.push(String.valueOf(result.sum));
+                valStack.push(String.valueOf(result.getSum()));
                 isJudgementResult = false;
+            }
+            else if(token.equals("h")){
+                String n1 = valStack.pop();
+                DiceBunch diceBunch = diceResult.diceBunches.get(diceResult.diceBunches.size()-1);
+                diceBunch.keepHigh(Long.parseLong(n1));
+                valStack.pop();
+                valStack.push(String.valueOf(diceBunch.getSum()));
+            }
+            else if(token.equals("l")){
+                String n1 = valStack.pop();
+                DiceBunch diceBunch = diceResult.diceBunches.get(diceResult.diceBunches.size()-1);
+                diceBunch.keepLow(Long.parseLong(n1));
+                valStack.pop();
+                valStack.push(String.valueOf(diceBunch.getSum()));
             }
 
             else{
@@ -239,7 +253,7 @@ public class StackDice {
             }
         }
 
-        diceBunch.query = x + "d"+ y + "=" + diceBunch.sum;
+        diceBunch.query = x + "d"+ y + "=" + diceBunch.getSum();
         return diceBunch;
     }
 
