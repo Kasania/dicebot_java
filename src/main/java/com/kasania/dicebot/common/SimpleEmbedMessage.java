@@ -9,13 +9,13 @@ import com.kasania.dicebot.v1.DiceBunch;
 import com.kasania.dicebot.v1.DiceResult;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class SimpleEmbedMessage {
 
-    public static void replyTitleDesc(@NotNull MessageReceivedEvent event,String title, String desc){
-        event.getMessage().replyEmbeds(SimpleEmbedMessage.titleDescEmbed(title,desc)).queue();
+    public static void replyTitleDesc(@NotNull SlashCommandInteractionEvent event, String title, String desc){
+        event.replyEmbeds(SimpleEmbedMessage.titleDescEmbed(title,desc)).queue();
     }
 
     public static MessageEmbed titleDescEmbed(String title, String... desc){

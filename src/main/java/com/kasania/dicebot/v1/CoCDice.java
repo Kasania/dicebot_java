@@ -10,28 +10,31 @@ import com.kasania.dicebot.common.SpreadSheetManager;
 import com.kasania.dicebot.common.WorkSheet;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class CoCDice {
 
     private static final String GOOGLE_SPREADSHEET_PREFIX = "https://docs.google.com/spreadsheets/d/";
 
-    public MessageEmbed command_ruse(@NotNull MessageReceivedEvent event){
+    public MessageEmbed command_ruse(@NotNull SlashCommandInteractionEvent event){
 
         Player player = Player.fromEvent(event);
 
-        String message = event.getMessage().getContentDisplay();
-        String[] args = message.split(" ");
+        List<OptionMapping> message = event.getOptions();
+        List<String> args = message.stream().map(OptionMapping::getAsString).collect(Collectors.toList());
         String spreadSheetId;
         String sheetName = null;
         int sheetId = -1;
-        if(args[1].startsWith(GOOGLE_SPREADSHEET_PREFIX)){
-            String link = args[1].replace(GOOGLE_SPREADSHEET_PREFIX,"");
+        if(args.get(0).startsWith(GOOGLE_SPREADSHEET_PREFIX)){
+            String link = args.get(0).replace(GOOGLE_SPREADSHEET_PREFIX,"");
             String[] data = link.split("/");
             spreadSheetId = data[0];
             //TODO: 멀티프로필 지원
@@ -39,8 +42,8 @@ public class CoCDice {
                 sheetId = Integer.parseInt(data[1].split("gid=")[1]);
             }else{
                 StringBuilder stringBuilder = new StringBuilder();
-                for (int i = 2; i < args.length; i++) {
-                    stringBuilder.append(args[i]).append(" ");
+                for (int i = 1; i < args.size(); i++) {
+                    stringBuilder.append(args.get(i)).append(" ");
                 }
                 sheetName = stringBuilder.toString().trim();
             }
@@ -84,18 +87,18 @@ public class CoCDice {
                 "지금부터 "+sheet.characterName + " 탐사자로 플레이합니다.");
     }
 
-    public MessageEmbed command_rr(@NotNull MessageReceivedEvent event){
+    public MessageEmbed command_rr(@NotNull SlashCommandInteractionEvent event){
 
         Player player = Player.fromEvent(event);
         WorkSheet sheet = SpreadSheetManager.getInstance().getPlayerSheet(player);
 
-        String message = event.getMessage().getContentDisplay();
-        String[] args = message.split(" ");
+        List<OptionMapping> message = event.getOptions();
+        List<String> args = message.stream().map(OptionMapping::getAsString).collect(Collectors.toList());
 
-        String target = args[1];
+        String target = args.get(0);
         String expr = "";
-        if(args.length>2){
-            expr = args[2];
+        if(args.size()>1){
+            expr = args.get(1);
         }
 
         try{
@@ -144,7 +147,7 @@ public class CoCDice {
         return result;
     }
 
-    public MessageEmbed command_rdel(@NotNull MessageReceivedEvent event){
+    public MessageEmbed command_rdel(@NotNull SlashCommandInteractionEvent event){
         Player player = Player.fromEvent(event);
         WorkSheet workSheet = SpreadSheetManager.getInstance().removePlayerSheet(player);
 
@@ -158,13 +161,13 @@ public class CoCDice {
 
     }
 
-    public MessageEmbed command_rstat(@NotNull MessageReceivedEvent event){
+    public MessageEmbed command_rstat(@NotNull SlashCommandInteractionEvent event){
         Player player = Player.fromEvent(event);
         WorkSheet sheet = SpreadSheetManager.getInstance().getPlayerSheet(player);
 
         if(Objects.isNull(sheet)){
             return SimpleEmbedMessage.titleDescEmbed(":x: 등록된 시트를 발견할 수 없습니다.",
-                    "!ruse 명령어를 사용하여 시트를 등록해보세요.");
+                    "/ruse 명령어를 사용하여 시트를 등록해보세요.");
         }
         else{
             return SimpleEmbedMessage.titleDescEmbed("현재 \"" + sheet.characterName + "\" 탐사자로 플레이하고 있습니다.",
@@ -173,7 +176,7 @@ public class CoCDice {
         }
     }
 
-    public MessageEmbed command_rccc(@NotNull MessageReceivedEvent event){
+    public MessageEmbed command_rccc(@NotNull SlashCommandInteractionEvent event){
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle(":game_die: CoC 7th 캐릭터 메이킹");

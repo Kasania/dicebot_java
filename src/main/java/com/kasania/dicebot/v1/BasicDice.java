@@ -8,24 +8,26 @@ package com.kasania.dicebot.v1;
 import com.kasania.dicebot.common.SimpleEmbedMessage;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class BasicDice {
 
     private final Map<Player,Map<String,String>> diceAliases = new HashMap<>();
 
-    public MessageEmbed command_r(@NotNull MessageReceivedEvent event){
-        String message = event.getMessage().getContentDisplay();
-        String queryString = message.split(" ")[1];
+    public MessageEmbed command_r(@NotNull SlashCommandInteractionEvent event){
+        List<OptionMapping> message = event.getOptions();
+        List<String> args = message.stream().map(OptionMapping::getAsString).collect(Collectors.toList());
 
-        return rollDice(queryString);
+        return rollDice(args.get(0));
     }
 
-    public MessageEmbed command_ra(@NotNull MessageReceivedEvent event){
+    public MessageEmbed command_ra(@NotNull SlashCommandInteractionEvent event){
 
         Player player = Player.fromEvent(event);
         Map<String,String> aliases = diceAliases.get(player);
@@ -35,67 +37,69 @@ public class BasicDice {
             diceAliases.put(player,aliases);
         }
 
-        String[] messages = event.getMessage().getContentDisplay().split(" ");
+        List<OptionMapping> message = event.getOptions();
+        List<String> args = message.stream().map(OptionMapping::getAsString).collect(Collectors.toList());
 
-        String name = messages[1];
-        String expr = messages[2];
+        String name = args.get(0);
+        String expr = args.get(1);
 
         aliases.put(name,expr);
 
         return SimpleEmbedMessage.titleDescEmbed("주사위 별명이 등록되었습니다.", name+" -> "+expr);
     }
 
-    public MessageEmbed command_rw(@NotNull MessageReceivedEvent event){
+    public MessageEmbed command_rw(@NotNull SlashCommandInteractionEvent event){
 
-        String message = event.getMessage().getContentDisplay();
-        String[] args = message.split(" ");
+        List<OptionMapping> message = event.getOptions();
+        List<String> args = message.stream().map(OptionMapping::getAsString).collect(Collectors.toList());
 
-        int elementSize = args.length - 1;
+        int elementSize = args.size();
 
         String query = "1d"+elementSize;
 
         DiceResult result = new StackDice().calcExpr(query);
-        return SimpleEmbedMessage.titleDescEmbed(":game_die: 결과 : " + args[Integer.parseInt(result.result)],
+        return SimpleEmbedMessage.titleDescEmbed(":game_die: 결과 : " + args.get(Integer.parseInt(result.result)-1),
                 result.query + "=" + result.result);
 
     }
 
-    public MessageEmbed command_rt(@NotNull MessageReceivedEvent event){
+    public MessageEmbed command_rt(@NotNull SlashCommandInteractionEvent event){
 
         Player player = Player.fromEvent(event);
         Map<String,String> aliases = diceAliases.get(player);
 
         if(Objects.isNull(aliases) || aliases.size() == 0){
             return SimpleEmbedMessage.titleDescEmbed(":x: 등록된 주사위 별명이 없습니다.",
-                    "!ra 명령을 사용하여 별명을 등록하세요.");
+                    "/ra 명령을 사용하여 별명을 등록하세요.");
         }
 
-        String[] messages = event.getMessage().getContentDisplay().split(" ");
+        List<OptionMapping> message = event.getOptions();
+        List<String> args = message.stream().map(OptionMapping::getAsString).collect(Collectors.toList());
 
-        String name = messages[1];
+        String name = args.get(0);
         String queryString = aliases.get(name);
 
         if(Objects.isNull(queryString)){
             return SimpleEmbedMessage.titleDescEmbed(":x: 해당 별명으로 등록된 주사위가 없습니다.",
-                    "!ra 명령을 사용하여 별명을 등록하세요.");
+                    "/ra 명령을 사용하여 별명을 등록하세요.");
         }
 
-        if(messages.length>2){
-            String expr = messages[2];
+        if(args.size()>1){
+            String expr = args.get(1);
             queryString = aliases.get(name)+expr;
         }
 
         return rollDice(queryString);
     }
 
-    public MessageEmbed command_rl(@NotNull MessageReceivedEvent event){
+    public MessageEmbed command_rl(@NotNull SlashCommandInteractionEvent event){
 
         Player player = Player.fromEvent(event);
         Map<String,String> aliases = diceAliases.get(player);
 
         if(Objects.isNull(aliases) || aliases.size() == 0){
             return SimpleEmbedMessage.titleDescEmbed(":x: 등록된 주사위 별명이 없습니다.",
-                    "!ra 명령을 사용하여 별명을 등록하세요.");
+                    "/ra 명령을 사용하여 별명을 등록하세요.");
         }
         StringBuilder registeredDice = new StringBuilder();
         for (Map.Entry<String, String> alias : aliases.entrySet()) {
@@ -109,24 +113,25 @@ public class BasicDice {
                 registeredDice.toString());
     }
 
-    public MessageEmbed command_rd(@NotNull MessageReceivedEvent event){
+    public MessageEmbed command_rd(@NotNull SlashCommandInteractionEvent event){
 
         Player player = Player.fromEvent(event);
         Map<String,String> aliases = diceAliases.get(player);
 
         if(Objects.isNull(aliases) || aliases.size() == 0){
             return SimpleEmbedMessage.titleDescEmbed(":x: 등록된 주사위 별명이 없습니다.",
-                    "!ra 명령을 사용하여 별명을 등록하세요.");
+                    "/ra 명령을 사용하여 별명을 등록하세요.");
         }
 
-        String[] messages = event.getMessage().getContentDisplay().split(" ");
+        List<OptionMapping> message = event.getOptions();
+        List<String> args = message.stream().map(OptionMapping::getAsString).collect(Collectors.toList());
 
-        String name = messages[1];
+        String name = args.get(0);
         String expr = aliases.get(name);
 
         if(Objects.isNull(expr)){
             return SimpleEmbedMessage.titleDescEmbed(":x: 해당 별명으로 등록된 주사위가 없습니다.",
-                    "!ra 명령을 사용하여 별명을 등록하세요.");
+                    "/ra 명령을 사용하여 별명을 등록하세요.");
         }
 
         aliases.remove(name);

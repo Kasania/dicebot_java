@@ -5,7 +5,7 @@
  */
 package com.kasania.dicebot.v1;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -15,8 +15,8 @@ public class Player {
     public final String GuildID;
     public final String authorID;
 
-    public synchronized static Player fromEvent(@NotNull MessageReceivedEvent event) {
-        return new Player(event.getGuild().getId(), event.getAuthor().getId());
+    public synchronized static Player fromEvent(@NotNull SlashCommandInteractionEvent event) {
+        return new Player(event.getGuild().getId(), event.getUser().getId());
     }
 
     public Player(String guildID, String authorID) {

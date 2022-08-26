@@ -7,12 +7,12 @@ package com.kasania.dicebot.v1;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class DnDDice {
 
-    public MessageEmbed command_rDnD(@NotNull MessageReceivedEvent event){
+    public MessageEmbed command_rDnD(@NotNull SlashCommandInteractionEvent event){
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle(":game_die: DnD 5th 캐릭터 메이킹");
