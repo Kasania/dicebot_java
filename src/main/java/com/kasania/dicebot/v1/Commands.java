@@ -237,18 +237,16 @@ public enum Commands {
             executors.execute(() -> {
                 try{
                     MessageEmbed result = eventHandler.apply(event);
-                    log.info("[{}] [{}] {}: {} -> {}",
+                    log.info("[{}] {}: {} -> {}",
                             event.getGuild().getName(),
-                            event.getChannel(),
                             event.getMember().getEffectiveName(),
                             event.getOptions(),
                             result.getTitle()
                     );
                     event.replyEmbeds(result).queue();
                 }catch (Exception e){
-                    log.info("[{}] [{}] {}: {} -> {}",
+                    log.info("[{}] {}: {} -> {}",
                             event.getGuild().getName(),
-                            event.getChannel(),
                             event.getMember().getEffectiveName(),
                             event.getOptions(),
                             "Execution Fail"
