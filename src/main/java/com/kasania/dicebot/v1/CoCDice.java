@@ -107,7 +107,8 @@ public class CoCDice {
             String query = "(1d100"+expr+")#"+value;
 
             DiceResult result = new StackDice().calcExpr(query);
-            return SimpleEmbedMessage.diceEmbed(judgement(result, value));
+
+            return SimpleEmbedMessage.diceEmbed(judgement(new DiceResult(target+" ["+result.query+"]",result.diceBunches,result.judgements), value));
 
         }catch (IllegalArgumentException e){
             return SimpleEmbedMessage.titleDescEmbed(":x: 해당 이름의 특성/기능이 없습니다.",
