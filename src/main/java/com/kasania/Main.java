@@ -11,9 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
-import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -35,7 +33,7 @@ public class Main {
             }
 
             log.info("Dice bot is initialized");
-        } catch (IOException | LoginException | InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             log.error("{}",e.getMessage(),e);
         }
     }
