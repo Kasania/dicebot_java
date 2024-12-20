@@ -90,7 +90,7 @@ public enum Commands {
                     각 연산사이에 사칙, 비교연산자를 사용하여 연결할 수 있으며, 비교 연산 후에는 성공/실패에 따라 값이 1/0으로 처리됩니다.
                     NdRhX 혹은 NdRlX 연산시에 d와 h 사이에 추가적인 연산을 하는 경우, 올바르지 않은 값이 출력될 수 있습니다.""",
 
-            new OptionData(OptionType.STRING,"diceexpr","주사위 표현식",true,false)
+            new OptionData(OptionType.STRING,"diceexpr","주사위 표현식",false,false)
                     .addChoice("d100","1d100")
                     .addChoice("d20","1d20")
                     .addChoice("d10","1d10")
