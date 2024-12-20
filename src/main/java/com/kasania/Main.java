@@ -25,11 +25,21 @@ public class Main {
         try {
             log.info("Dice bot is started");
             String TOKEN = Files.readAllLines(Path.of("keys.txt"), StandardCharsets.UTF_8).get(0);
-            JDA jda = JDABuilder.createDefault(TOKEN).setActivity(Activity.listening("/rhelp")).addEventListeners(new DiceBot()).build();
+            int shardNum = 3;
+            for (int i = 0; i < shardNum; i++) {
+                log.info("shard {} init",i);
 
-            jda.awaitReady();
-            for (Commands value : Commands.values()) {
-                jda.upsertCommand(value.name(),value.simpleHelpMessage).addOptions(value.optionData).queue();
+                JDA jda = JDABuilder.createDefault(TOKEN)
+                        .useSharding(i,shardNum)
+                        .setActivity(Activity.listening("/rhelp"))
+                        .addEventListeners(new DiceBot()).build();
+
+                jda.awaitReady();
+                for (Commands value : Commands.values()) {
+                    jda.upsertCommand(value.name(),value.simpleHelpMessage).addOptions(value.optionData).queue();
+                }
+
+                log.info("shard {} up",i);
             }
 
             log.info("Dice bot is initialized");
